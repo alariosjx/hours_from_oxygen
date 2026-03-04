@@ -20,7 +20,7 @@
   // Decodes common entities, numeric entities (decimal + hex),
   // and handles double-escaped strings by iterating a few times.
   // Also strips a few common invisible/junk characters WYSIWYGs add.
-  export function decodeWysiwygHtml(input: string): string {
+  function decodeWysiwygHtml(input: string): string {
     if (!input) return input;
 
     let s = String(input);
@@ -121,11 +121,15 @@
   } 
 
 
-  $: normalizedSrc = bodyHtml ? decodeWysiwygHtml(bodyHtml) : undefined;
-  $: if (browser && normalizedSrc) {
-    const doc = new DOMParser().parseFromString(normalizedSrc, "text/html");
-    normalizedSrc = doc.body.innerHTML;
+  function normalizeInBrowser(html: string): string {
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    return doc.body.innerHTML;
   }
+
+  $: normalizedSrc =
+    bodyHtml
+      ? (browser ? normalizeInBrowser(decodeWysiwygHtml(bodyHtml)) : decodeWysiwygHtml(bodyHtml))
+      : undefined;
 </script>
 
 {#if normalizedSrc}
