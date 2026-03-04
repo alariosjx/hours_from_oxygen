@@ -79,6 +79,7 @@
 		{#if getComponent(block.name)}
 			<svelte:component
 				this={getComponent(block.name)}
+				bodyHtml={block.bodyHtml}
 				{...normalizeAttrs(block.attrs)}
 			/>
 		{:else}
