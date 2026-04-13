@@ -6,6 +6,7 @@
 	import LandingHero from '$lib/components/LandingHero.svelte';
 	import Firstbanner from '$lib/components/FirstBanner.svelte';
 	import CovidTimeline from '$lib/components/CovidTimeline.svelte';
+	import Geography from '$lib/components/Geography.svelte';
 
 	const blocks = rawBlocks as Block[];
 </script>
@@ -16,6 +17,7 @@
 	<Firstbanner />
 </section>
 <CovidTimeline />
+<Geography />
 
 <!-- DO NOT EDIT (except to modify classes). This will become code imported from Google Doc. -->
 <section class="content-wrapper">

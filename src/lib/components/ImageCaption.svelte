@@ -40,7 +40,7 @@
 
 <div class="container-fluid story-image-wrap story-image-wrap--{align}">
 	<div class="row justify-content-center">
-		<div class="{colClass[align]}">
+		<div class={colClass[align]}>
 			<figure class="story-image story-image--{align}">
 				<img {src} {alt} loading="lazy" class="img-fluid" />
 				{#if caption || credit}

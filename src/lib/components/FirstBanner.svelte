@@ -34,6 +34,9 @@
 
 <!-- No JS needed — purely presentational -->
 
+<div class="sticky-wrapper">
+<div class="sticky-inner">
+
 <!-- God's eye TOP border SVG
      Zigzag/chevron pattern: gold wave + terracotta fill triangles + gold dots.
      preserveAspectRatio="none" stretches it to full width at any screen size. -->
@@ -215,7 +218,23 @@
 	</g>
 </svg>
 
+</div> <!-- /.sticky-inner -->
+</div> <!-- /.sticky-wrapper -->
+
 <style>
+	.sticky-wrapper {
+		height: 200vh; /* controls how long the banner stays pinned — increase for longer hold */
+		position: relative;
+	}
+	.sticky-inner {
+		position: sticky;
+		top: 0;
+		min-height: 100vh;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+
 	/* ── BANNER BACKGROUND ──
         Change --banner-bg here to adjust the color in VS Code.
         Currently a warm cream — light enough to contrast the dark hero. */
