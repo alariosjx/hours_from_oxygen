@@ -246,6 +246,34 @@ There are three size options"
 - large - large size, breaks out of text content
 - fit - sits within content
 
+### Mapbox 
+
+This component enables you to get a Mapbox map running in your project quickly.
+
+```
+[[Mapbox size="fit" latitude=48.85 longitude=2.35]]
+```
+
+There are three sizes options:
+
+- full - fullscreen
+- large - large size, breaks out of text content
+- fit - sits within content
+
+The shortcode takes as arguments latitude and longitude, which the are coordinates on which the map will center. If nothing is inputed, it will default to Berkeley, CA.
+
+Note that to get this working, you will need your *own* Mapbox token. In order to get it, Create an account at [Mapbox](https://www.mapbox.com/). It will prompt you to input credit card information. Mapbox is free up to a certain limit (50,000 monthly loads, 100,000 temporary geocoding requests), and it is easy enough to use. For future development, it may be nice to try to migrate to MapLibre.
+
+Once you have your account, go to Admin > Tokens. Create a token that is different from the default public token. Copy paste it inside of your .env file at the root of this folder, by adding this line to the .env file:
+
+```
+VITE_MAPBOX_ACCESS_TOKEN="YOUR_TOKEN_HERE"
+```
+
+Replace "YOUR_TOKEN_HERE" with the token you copied from Mapbox. Keep the quotes around it.
+
+To change the height of your map, you will need to change the height css attribute in the svelte component.
+
 # Developing Custom Components and Shortcodes
 
 Components are stored in `src/lib/components/` There is a sample component called `CoolNewFeature.svelte` that one can use as a template and make copies.
