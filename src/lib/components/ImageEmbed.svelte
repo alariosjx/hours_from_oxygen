@@ -4,6 +4,8 @@
   export let alt: string | undefined;
   export let caption: string | undefined;
   export let size: 'full' | 'large' | 'fit' = 'large';
+  export let bordered: boolean = false;
+  export let maxWidth: string | undefined = undefined;
 
   let embeddedSrc: string | null = null;
   let embeddedAlt: string | null = null;
@@ -62,7 +64,7 @@
 {#if shouldRender}
   {#if size === 'full'}
     <figure class="my-3 full-bleed">
-      <img src={finalSrc} alt={finalAlt} class="img-fluid border" />
+      <img src={finalSrc} alt={finalAlt} class="img-fluid" class:gods-eye={bordered} style={maxWidth ? `max-width:${maxWidth};display:block;margin:0 auto` : ''} />
       {#if caption}
         <figcaption class="mt-2 text-muted small">{caption}</figcaption>
       {/if}
@@ -74,7 +76,7 @@
       <div class="container-fluid">
         <div class="row justify-content-center">
           <div class="col-12 col-lg-10 col-xxl-8">
-            <img src={finalSrc} alt={finalAlt} class="img-fluid border" />
+            <img src={finalSrc} alt={finalAlt} class="img-fluid" class:gods-eye={bordered} style={maxWidth ? `max-width:${maxWidth};display:block;margin:0 auto` : ''} />
             {#if caption}
               <figcaption class="mt-2 text-muted small">{caption}</figcaption>
             {/if}
@@ -86,10 +88,20 @@
   {:else}
     <!-- fit -->
     <figure class="my-3">
-      <img src={finalSrc} alt={finalAlt} class="img-fluid border" />
+      <img src={finalSrc} alt={finalAlt} class="img-fluid" class:gods-eye={bordered} style={maxWidth ? `max-width:${maxWidth};display:block;margin:0 auto` : ''} />
       {#if caption}
         <figcaption class="mt-2 text-muted small">{caption}</figcaption>
       {/if}
     </figure>
   {/if}
 {/if}
+
+<style>
+  .gods-eye {
+    border: 2px solid #c8960a;
+    box-shadow:
+      0 0 0 5px #2a0e58,
+      0 0 0 7px #c8960a;
+    border-radius: 2px;
+  }
+</style>

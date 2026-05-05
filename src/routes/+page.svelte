@@ -5,8 +5,8 @@
 	// Animated lo-fi landing hero — edit in src/lib/components/LandingHero.svelte
 	import LandingHero from '$lib/components/LandingHero.svelte';
 	import Firstbanner from '$lib/components/FirstBanner.svelte';
-	import CovidTimeline from '$lib/components/CovidTimeline.svelte';
-	import Geography from '$lib/components/Geography.svelte';
+	// import CovidTimeline from '$lib/components/CovidTimeline.svelte';
+	// import Geography from '$lib/components/Geography.svelte';
 
 	const blocks = rawBlocks as Block[];
 </script>
@@ -16,8 +16,8 @@
 <section class="content-wrapper">
 	<Firstbanner />
 </section>
-<CovidTimeline />
-<Geography />
+<!-- <CovidTimeline /> -->
+<!-- <Geography /> -->
 
 <!-- DO NOT EDIT (except to modify classes). This will become code imported from Google Doc. -->
 <section class="content-wrapper">

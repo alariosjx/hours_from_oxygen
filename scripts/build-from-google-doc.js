@@ -260,6 +260,88 @@ function stripHtmlToText(html) {
 		.trim();
 }
 
+function compilePairedAudioPhotoStrip(block) {
+	if (block.type !== 'shortcode') return block;
+	if (block.name !== 'AudioPhotoStrip') return block;
+	if (!block.bodyHtml || !block.bodyHtml.trim()) return { ...block, bodyHtml: undefined };
+
+	try {
+		const txt = stripHtmlToText(block.bodyHtml);
+		const start = txt.indexOf('[');
+		const end = txt.lastIndexOf(']');
+		if (start === -1 || end === -1 || end <= start) {
+			return { type: 'shortcode', name: block.name, attrs: block.attrs || {} };
+		}
+
+		const json = txt.slice(start, end + 1).replace(/\r?\n/g, ' ');
+		const arr = JSON.parse(json);
+		if (!Array.isArray(arr)) {
+			return { type: 'shortcode', name: block.name, attrs: block.attrs || {} };
+		}
+
+		const steps = arr
+			.map((x) => ({
+				img: typeof x.img === 'string' ? x.img : '',
+				alt: typeof x.alt === 'string' ? x.alt : undefined,
+				timing: parseFloat(String(x.timing ?? '0')),
+				duration: parseFloat(String(x.duration ?? '0.5')),
+				ease: typeof x.ease === 'string' ? x.ease : 'easeIn'
+			}))
+			.filter((s) => s.img);
+
+		const nextAttrs = { ...(block.attrs || {}) };
+		nextAttrs.steps = steps;
+
+		return { type: 'shortcode', name: block.name, attrs: nextAttrs };
+	} catch {
+		return { type: 'shortcode', name: block.name, attrs: block.attrs || {} };
+	}
+}
+
+// Repairs JSON that has unescaped " inside string values (e.g. from quoted speech)
+// and literal newlines (from multi-paragraph Google Doc text).
+function repairJsonString(raw) {
+	// Collapse literal newlines to spaces first
+	let s = raw.replace(/\r?\n/g, ' ');
+	let out = '';
+	let inString = false;
+	let i = 0;
+	while (i < s.length) {
+		const c = s[i];
+		// Pass through already-escaped sequences
+		if (c === '\\' && inString) {
+			out += c + (s[i + 1] ?? '');
+			i += 2;
+			continue;
+		}
+		if (c === '"') {
+			if (!inString) {
+				inString = true;
+				out += c;
+				i++;
+				continue;
+			}
+			// Inside a string: check if this looks like a closing quote.
+			// A closing quote is followed (ignoring spaces) by a JSON structural char.
+			let j = i + 1;
+			while (j < s.length && (s[j] === ' ' || s[j] === '\t')) j++;
+			const next = s[j] ?? '';
+			if (!next || next === ',' || next === '}' || next === ']' || next === ':') {
+				inString = false;
+				out += c;
+			} else {
+				// Content quote inside a string value — escape it
+				out += '\\"';
+			}
+			i++;
+			continue;
+		}
+		out += c;
+		i++;
+	}
+	return out;
+}
+
 function compilePairedScrolly(block) {
 	if (block.type !== 'shortcode') return block;
 	if (block.name !== 'Scrolly') return block;
@@ -273,7 +355,7 @@ function compilePairedScrolly(block) {
 			return { type: 'shortcode', name: block.name, attrs: block.attrs || {} };
 		}
 
-		const json = txt.slice(start, end + 1);
+		const json = repairJsonString(txt.slice(start, end + 1));
 		const arr = JSON.parse(json);
 		if (!Array.isArray(arr)) {
 			return { type: 'shortcode', name: block.name, attrs: block.attrs || {} };
@@ -303,7 +385,9 @@ function compilePairedScrolly(block) {
 
 function compileBlocks(blocks) {
 	return blocks.map((b) =>
-		hoistBodyHtmlIntoAttrs(compilePairedScrolly(compilePairedImageEmbed(b)))
+		hoistBodyHtmlIntoAttrs(
+			compilePairedAudioPhotoStrip(compilePairedScrolly(compilePairedImageEmbed(b)))
+		)
 	);
 }
 

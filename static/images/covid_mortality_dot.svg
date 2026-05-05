@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='648.00pt' height='360.00pt' viewBox='0 0 648.00 360.00'>
+<g class='svglite'>
+<defs>
+  <style type='text/css'><![CDATA[
+    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+    .svglite text {
+      white-space: pre;
+    }
+    .svglite g.glyphgroup path {
+      fill: inherit;
+      stroke: none;
+    }
+  ]]></style>
+</defs>
+<rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
+<defs>
+  <clipPath id='cpMC4wMHw2NDguMDB8MC4wMHwzNjAuMDA='>
+    <rect x='0.00' y='0.00' width='648.00' height='360.00' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpMC4wMHw2NDguMDB8MC4wMHwzNjAuMDA=)'>
+<rect x='-0.000000000000064' y='0.00' width='648.00' height='360.00' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
+</g>
+<defs>
+  <clipPath id='cpODUuNTF8NjI0LjA5fDU2LjExfDMwMi4xMA=='>
+    <rect x='85.51' y='56.11' width='538.58' height='245.99' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpODUuNTF8NjI0LjA5fDU2LjExfDMwMi4xMA==)'>
+<polyline points='85.51,302.10 85.51,56.11 ' style='stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='229.63,302.10 229.63,56.11 ' style='stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='373.75,302.10 373.75,56.11 ' style='stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='517.87,302.10 517.87,56.11 ' style='stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;' />
+<line x1='85.51' y1='91.25' x2='447.97' y2='91.25' style='stroke-width: 1.71; stroke: #CCCCCC; stroke-linecap: butt;' />
+<line x1='85.51' y1='149.82' x2='410.50' y2='149.82' style='stroke-width: 1.71; stroke: #CCCCCC; stroke-linecap: butt;' />
+<line x1='85.51' y1='208.39' x2='400.42' y2='208.39' style='stroke-width: 1.71; stroke: #CCCCCC; stroke-linecap: butt;' />
+<line x1='85.51' y1='266.96' x2='257.74' y2='266.96' style='stroke-width: 1.71; stroke: #CCCCCC; stroke-linecap: butt;' />
+<circle cx='447.97' cy='91.25' r='6.76' style='stroke-width: 0.71; stroke: #E74C3C; fill: #E74C3C;' />
+<circle cx='410.50' cy='149.82' r='6.76' style='stroke-width: 0.71; stroke: #E67E22; fill: #E67E22;' />
+<circle cx='400.42' cy='208.39' r='6.76' style='stroke-width: 0.71; stroke: #2C3E50; fill: #2C3E50;' />
+<circle cx='257.74' cy='266.96' r='6.76' style='stroke-width: 0.71; stroke: #2ECC71; fill: #2ECC71;' />
+<text x='463.20' y='95.52' style='font-size: 11.95px; font-weight: bold;fill: #E74C3C; font-family: "Arial";' textLength='33.84px' lengthAdjust='spacingAndGlyphs'>50.3%</text>
+<text x='425.73' y='154.09' style='font-size: 11.95px; font-weight: bold;fill: #E67E22; font-family: "Arial";' textLength='33.84px' lengthAdjust='spacingAndGlyphs'>45.1%</text>
+<text x='415.65' y='212.66' style='font-size: 11.95px; font-weight: bold;fill: #2C3E50; font-family: "Arial";' textLength='33.84px' lengthAdjust='spacingAndGlyphs'>43.7%</text>
+<text x='272.97' y='271.23' style='font-size: 11.95px; font-weight: bold;fill: #2ECC71; font-family: "Arial";' textLength='33.84px' lengthAdjust='spacingAndGlyphs'>23.9%</text>
+<text x='453.02' y='63.56' style='font-size: 8.54px; font-style: italic;fill: #E74C3C; font-family: "Arial";' textLength='81.16px' lengthAdjust='spacingAndGlyphs'>Supero 60% en picos</text>
+<text x='453.02' y='75.85' style='font-size: 8.54px; font-style: italic;fill: #E74C3C; font-family: "Arial";' textLength='48.42px' lengthAdjust='spacingAndGlyphs'>de olas 1 y 2</text>
+</g>
+<g clip-path='url(#cpMC4wMHw2NDguMDB8MC4wMHwzNjAuMDA=)'>
+<text x='80.58' y='271.26' text-anchor='end' style='font-size: 12.00px; font-weight: bold;fill: #4D4D4D; font-family: "Arial";' textLength='44.00px' lengthAdjust='spacingAndGlyphs'>Privado</text>
+<text x='80.58' y='212.69' text-anchor='end' style='font-size: 12.00px; font-weight: bold;fill: #4D4D4D; font-family: "Arial";' textLength='60.66px' lengthAdjust='spacingAndGlyphs'>Sec. Salud</text>
+<text x='80.58' y='154.12' text-anchor='end' style='font-size: 12.00px; font-weight: bold;fill: #4D4D4D; font-family: "Arial";' textLength='42.66px' lengthAdjust='spacingAndGlyphs'>ISSSTE</text>
+<text x='80.58' y='95.55' text-anchor='end' style='font-size: 12.00px; font-weight: bold;fill: #4D4D4D; font-family: "Arial";' textLength='29.33px' lengthAdjust='spacingAndGlyphs'>IMSS</text>
+<text x='85.51' y='313.33' text-anchor='middle' style='font-size: 8.80px;fill: #4D4D4D; font-family: "Arial";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>0%</text>
+<text x='229.63' y='313.33' text-anchor='middle' style='font-size: 8.80px;fill: #4D4D4D; font-family: "Arial";' textLength='17.61px' lengthAdjust='spacingAndGlyphs'>20%</text>
+<text x='373.75' y='313.33' text-anchor='middle' style='font-size: 8.80px;fill: #4D4D4D; font-family: "Arial";' textLength='17.61px' lengthAdjust='spacingAndGlyphs'>40%</text>
+<text x='517.87' y='313.33' text-anchor='middle' style='font-size: 8.80px;fill: #4D4D4D; font-family: "Arial";' textLength='17.61px' lengthAdjust='spacingAndGlyphs'>60%</text>
+<text x='354.80' y='325.80' text-anchor='middle' style='font-size: 11.00px; font-family: "Arial";' textLength='148.62px' lengthAdjust='spacingAndGlyphs'>Fallecidos / hospitalizados (%)</text>
+<text x='85.51' y='44.04' style='font-size: 10.00px;fill: #666666; font-family: "Arial";' textLength='340.81px' lengthAdjust='spacingAndGlyphs'>% de pacientes hospitalizados que fallecieron — Mexico, 2020–9 mayo 2023</text>
+<text x='85.51' y='29.95' style='font-size: 14.00px; font-weight: bold; font-family: "Arial";' textLength='358.47px' lengthAdjust='spacingAndGlyphs'>Letalidad hospitalaria por COVID-19 segun institucion</text>
+<text x='624.09' y='338.61' text-anchor='end' style='font-size: 7.00px;fill: #999999; font-family: "Arial";' textLength='315.89px' lengthAdjust='spacingAndGlyphs'>Fuente: Comision Independiente / Informe COVID 2024 (CONEVAL) | Analisis: Andres Jimenez Larios</text>
+</g>
+</g>
+</svg>

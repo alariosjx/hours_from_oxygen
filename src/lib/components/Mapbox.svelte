@@ -1,10 +1,9 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
-	import 'mapbox-gl/dist/mapbox-gl.css';
 
   // Default map centers on Berkeley, CA
-  export let longitude :number | -122.2585;
-  export let latitude: number | 37.8719
+  export let longitude: number = -122.2585;
+  export let latitude: number = 37.8719;
 
   // Sizing wrangling from other components //
 	export let size: 'full' | 'large' | 'fit' = 'fit';
@@ -23,7 +22,8 @@
 	const token = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
 	onMount(async () => {
-		// Need to load library onmount if not disabling ssr for the whole page
+		// CSS must load in browser only — static import breaks SSR
+		await import('mapbox-gl/dist/mapbox-gl.css');
 		const mapboxgl = await import('mapbox-gl');
 
 		map = new mapboxgl.Map({

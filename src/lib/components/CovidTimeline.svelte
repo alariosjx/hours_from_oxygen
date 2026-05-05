@@ -46,17 +46,17 @@
 			mediaType: 'image',
 			location: 'Mexico City',
 			date: 'Mar 20, 2020',
-			src: '/media/mexico-city-lockdown.jpg',
+			src: '/images/checking.jpeg',
 			left: '2vw',
 			top: '12vh',
-			width: '18vw',
+			width: '60vw',
 			height: '65vh',
 			z: 10
 		},
 		{
 			type: 'snippet',
 			headline: 'Mexico orders nationwide lockdown as COVID-19 surges',
-			dek: 'Authorities declared a national health emergency, shutting down nonessential businesses across the country.',
+			dek: 'Authorities declared a national health emergency, shutting down nonessential businesses across the country in mid 2020.',
 			left: '17vw',
 			top: '4vh',
 			width: '24vw',
@@ -65,14 +65,14 @@
 		},
 		{
 			type: 'intro-media',
-			mediaType: 'video',
-			location: 'Cancún, Q. Roo',
-			date: 'Jul 15, 2020',
-			src: '/media/cancun-tourists.mp4',
-			left: '25vw',
+			mediaType: 'image',
+			location: 'Puerto Vallarta',
+			date: 'January, 2021',
+			src: '/images/gaycruise.png',
+			left: '55vw',
 			top: '18vh',
-			width: '14vw',
-			height: '70vh',
+			width: '35vw',
+			height: '29vh',
 			z: 22
 		},
 		// ── Mid-left ──
@@ -80,24 +80,12 @@
 			type: 'search',
 			query: '¿Dónde comprar tanque de oxígeno en México?',
 			left: '36vw',
-			top: '72vh',
+			top: '65vh',
 			width: '30vw',
 			height: '7vh',
 			z: 28
 		},
-		{
-			type: 'intro-media',
-			mediaType: 'text',
-			location: 'Tepic, Nayarit',
-			date: 'Dec 10, 2020',
-			caption:
-				'Hospitals in Tepic reached full capacity. Families waited outside in the cold for any news about their loved ones.',
-			left: '40vw',
-			top: '3vh',
-			width: '20vw',
-			height: '62vh',
-			z: 14
-		},
+
 		// ── Center ──
 		{
 			type: 'search',
@@ -108,25 +96,14 @@
 			height: '7vh',
 			z: 24
 		},
-		{
-			type: 'intro-media',
-			mediaType: 'image',
-			location: 'Guadalajara, Jalisco',
-			date: 'Feb 5, 2021',
-			src: '/media/guadalajara-vaccine.jpg',
-			left: '62vw',
-			top: '6vh',
-			width: '20vw',
-			height: '65vh',
-			z: 16
-		},
+
 		// ── Mid-right ──
 		{
 			type: 'snippet',
 			headline: 'When money determines who lives and who dies',
 			dek: 'In rural Nayarit, access to oxygen during the COVID-19 surge often came down to wealth — and proximity to a city.',
 			left: '80vw',
-			top: '32vh',
+			top: '44vh',
 			width: '26vw',
 			height: '24vh',
 			z: 26
@@ -134,14 +111,14 @@
 		{
 			type: 'intro-media',
 			mediaType: 'image',
-			location: 'Cancún, Q. Roo',
+			location: 'Mexico',
 			date: 'Jul 15, 2020',
-			src: '/media/cancun-tourists.jpg',
-			caption: 'Tourists flocked to Cancún despite rising COVID-19 cases.',
-			left: '88vw',
+			src: '/images/reported.png',
+			caption: 'Cases spiked in various waves',
+			left: '108vw',
 			top: '2vh',
-			width: '17vw',
-			height: '68vh',
+			width: '30vw',
+			height: '60vh',
 			z: 12
 		},
 		// ── Far right ──
@@ -238,15 +215,12 @@
 </script>
 
 <!-- Outer controls scroll runway. Sticky inner stays pinned while user scrolls through it. -->
-<section class="timeline-section">
+<section class="timeline-section full-bleed">
 	<div class="timeline-outer" bind:this={outerEl}>
 		<!-- phase drives position: fixed (active) vs absolute (before/after) -->
 		<div class="timeline-panel" data-phase={phase}>
 			<!-- Wide canvas — slides left as user scrolls down through the outer wrapper -->
-			<div
-				class="timeline-canvas"
-				style="transform: translateX({offsetX}px)"
-			>
+			<div class="timeline-canvas" style="transform: translateX({offsetX}px)">
 				{#each elements as el (el.type + el.left)}
 					<div
 						class="scrolly-el"
@@ -276,8 +250,23 @@
 						{:else if el.type === 'search'}
 							<div class="search">
 								<svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
-									<circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="#9aa0a6" stroke-width="2" />
-									<line x1="15.5" y1="15.5" x2="22" y2="22" stroke="#9aa0a6" stroke-width="2" stroke-linecap="round" />
+									<circle
+										cx="10.5"
+										cy="10.5"
+										r="6.5"
+										fill="none"
+										stroke="#9aa0a6"
+										stroke-width="2"
+									/>
+									<line
+										x1="15.5"
+										y1="15.5"
+										x2="22"
+										y2="22"
+										stroke="#9aa0a6"
+										stroke-width="2"
+										stroke-linecap="round"
+									/>
 								</svg>
 								<p class="term">{el.query}</p>
 							</div>
@@ -290,7 +279,14 @@
 			<div class="scroll-nudge" aria-hidden="true">
 				<span>scroll to explore</span>
 				<svg viewBox="0 0 24 24" width="14" height="14">
-					<path d="M5 12h14M13 6l6 6-6 6" stroke="#a08060" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+					<path
+						d="M5 12h14M13 6l6 6-6 6"
+						stroke="#a08060"
+						stroke-width="2"
+						fill="none"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					/>
 				</svg>
 			</div>
 		</div>
