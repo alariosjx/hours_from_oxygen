@@ -5,7 +5,7 @@
 <script lang="ts">
 	import { onDestroy, onMount, tick } from 'svelte';
 	import { browser } from '$app/environment';
-	import { base } from '$app/paths';
+	import { asset } from '$app/paths';
 
 	import ScrollyStep from './scrolly/ScrollyStep.svelte';
 	import {
@@ -300,13 +300,13 @@
 						{#if m.kind === 'image'}
 							<div
 								class="media image"
-								style={`background-image:url("${encodeURI(base + m.url)}")`}
+								style={`background-image:url("${encodeURI(asset(m.url))}")`}
 							></div>
 						{:else}
 							<video
 								class="media video"
 								bind:this={videoEls[i]}
-								src={base + m.url}
+								src={asset(m.url)}
 								muted
 								playsinline
 								preload="metadata"
