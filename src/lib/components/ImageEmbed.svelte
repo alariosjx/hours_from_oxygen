@@ -1,24 +1,25 @@
 <!-- src/lib/components/ImageEmbed.svelte -->
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import { base } from '$app/paths';
+
 	export let src: string | undefined;
 	export let alt: string | undefined;
 	export let caption: string | undefined;
 	export let size: 'full' | 'large' | 'fit' = 'large';
 	export let bordered: boolean = false;
 	export let maxWidth: string | undefined = undefined;
-	export { asset } from '$app/environment';
 
 	let embeddedSrc: string | null = null;
 	let embeddedAlt: string | null = null;
 
 	function normalizeStaticPath(raw: string) {
 		const s = raw.trim();
-		if (/^data:/i.test(s) || /^https?:\/\//i.test(s)) return s;
-		if (s.startsWith('/')) return s;
-		return '/' + s;
+		if (/^data:/i.test(s) || /^https?:\/\//i.test(s)) return s; // Absolute URLs or data URIs
+		if (s.startsWith('/')) return base + s; // Prepend `base` to paths starting with `/`
+		return base + '/' + s; // Prepend `base` to other relative paths
 	}
 
-	import { onMount } from 'svelte';
 	let hostEl: HTMLElement | null = null;
 
 	onMount(() => {
@@ -54,7 +55,7 @@
 		}
 	});
 
-	$: finalSrc = src ? asset(normalizeStaticPath(src)) : asset(embeddedSrc);
+	$: finalSrc = src ? normalizeStaticPath(src) : embeddedSrc;
 	$: finalAlt = (alt && alt.trim().length ? alt : embeddedAlt) ?? '';
 	$: shouldRender = !!(finalSrc && finalSrc.trim().length);
 </script>

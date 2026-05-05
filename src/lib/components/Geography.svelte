@@ -48,34 +48,34 @@
 	// ── Municipality identifiers (GADM GID_2) ────────────────────────────────────
 	const URBAN_GIDS = new Set([
 		'MEX.18.18_2', // Tepic
-		'MEX.18.4_2',  // Bahía de Banderas
-		'MEX.18.8_2'   // Ixtlán del Río
+		'MEX.18.4_2', // Bahía de Banderas
+		'MEX.18.8_2' // Ixtlán del Río
 	]);
 	const AHUACATLAN_GID = 'MEX.18.2_2';
 
 	const MUN_LABELS: Record<string, string> = {
 		'MEX.18.18_2': 'Tepic',
-		'MEX.18.4_2':  'Bahía de Banderas',
-		'MEX.18.8_2':  'Ixtlán del Río',
-		'MEX.18.2_2':  'Ahuacatlán'
+		'MEX.18.4_2': 'Bahía de Banderas',
+		'MEX.18.8_2': 'Ixtlán del Río',
+		'MEX.18.2_2': 'Ahuacatlán'
 	};
 
 	const PACIFIC = new Set(['Nayarit', 'Jalisco', 'Colima', 'Sinaloa']);
 
 	// ── Color palette ─────────────────────────────────────────────────────────────
 	const C = {
-		bg:              '#f5f0e8',
-		state:           '#c9b8e8',
-		dim:             '#e8e2d8',
-		pacific:         '#9070c8',
-		nayaritFill:     '#d4c5f0',
-		munBorder:       '#a07010',
-		stateBorder:     'rgba(80,50,140,0.5)',
-		urban:           '#c04040',
-		rural:           '#4a7a8a',
-		highlight:       '#c8960a',
+		bg: '#f5f0e8',
+		state: '#c9b8e8',
+		dim: '#e8e2d8',
+		pacific: '#9070c8',
+		nayaritFill: '#d4c5f0',
+		munBorder: '#a07010',
+		stateBorder: 'rgba(80,50,140,0.5)',
+		urban: '#c04040',
+		rural: '#4a7a8a',
+		highlight: '#c8960a',
 		highlightBorder: 'rgba(180,130,0,0.9)',
-		text:            '#2a1a0e'
+		text: '#2a1a0e'
 	} as const;
 
 	// ── DOM refs ──────────────────────────────────────────────────────────────────
@@ -88,7 +88,7 @@
 
 	// ── Internal map state ────────────────────────────────────────────────────────
 	let projection: D3Type.GeoProjection;
-	let pathCtx: D3Type.GeoPath;           // path generator bound to canvas context
+	let pathCtx: D3Type.GeoPath; // path generator bound to canvas context
 	let W = 0;
 	let H = 0;
 	let dpr = 1;
@@ -96,7 +96,7 @@
 
 	let mexicoFeatures: FeatureCollection;
 	let nayaritFeatures: FeatureCollection;
-	let topo!: Topology<Objects>;           // raw topology (for mesh())
+	let topo!: Topology<Objects>; // raw topology (for mesh())
 
 	// Animated opacity for the municipality layer (0 = hidden, 1 = visible)
 	let munOpacity = 0;
@@ -128,12 +128,15 @@
 
 	function fitParams(geo: FeatureCollection) {
 		const p = d3.geoMercator().fitExtent(
-			[[PAD, PAD], [W - PAD, H - PAD]],
+			[
+				[PAD, PAD],
+				[W - PAD, H - PAD]
+			],
 			geo
 		);
 		return {
-			center:    p.center()    as [number, number],
-			scale:     p.scale(),
+			center: p.center() as [number, number],
+			scale: p.scale(),
 			translate: p.translate() as [number, number]
 		};
 	}
@@ -150,8 +153,8 @@
 	}
 
 	function zoomTarget(id: StepId): FeatureCollection | Feature {
-		if (id === 'mexico')    return mexicoFeatures;
-		if (id === 'pacific')   return pacificCollection();
+		if (id === 'mexico') return mexicoFeatures;
+		if (id === 'pacific') return pacificCollection();
 		if (id === 'nayarit' || id === 'nayarit-cls') return nayaritFeatures;
 		return ahuacatlanFeature();
 	}
@@ -274,9 +277,9 @@
 		const dur = animate ? 850 : 0;
 
 		const iCenter = d3.interpolate(projection.center() as [number, number], target.center);
-		const iScale  = d3.interpolate(projection.scale(), target.scale);
-		const iTrans  = d3.interpolate(projection.translate() as [number, number], target.translate);
-		const iOpac   = d3.interpolate(munOpacity, showMuns ? 1 : 0);
+		const iScale = d3.interpolate(projection.scale(), target.scale);
+		const iTrans = d3.interpolate(projection.translate() as [number, number], target.translate);
+		const iOpac = d3.interpolate(munOpacity, showMuns ? 1 : 0);
 
 		// Use a D3 transition on the canvas element for timing + easing
 		d3.select(canvasEl)
@@ -284,10 +287,7 @@
 			.duration(dur)
 			.ease(d3.easeCubicInOut)
 			.tween('render', () => (t: number) => {
-				projection
-					.center(iCenter(t))
-					.scale(iScale(t))
-					.translate(iTrans(t));
+				projection.center(iCenter(t)).scale(iScale(t)).translate(iTrans(t));
 				munOpacity = iOpac(t);
 				draw();
 			});
@@ -303,9 +303,7 @@
 			const sectionTop = outerEl.offsetTop;
 			const scrollable = outerEl.offsetHeight - window.innerHeight;
 			const scrolledInto = window.scrollY - sectionTop;
-			const progress = scrollable > 0
-				? Math.min(1, Math.max(0, scrolledInto / scrollable))
-				: 0;
+			const progress = scrollable > 0 ? Math.min(1, Math.max(0, scrolledInto / scrollable)) : 0;
 			const next = Math.round(progress * (STEPS.length - 1));
 			if (next !== currentStep) {
 				currentStep = next;
@@ -327,16 +325,13 @@
 
 	// ── Init ──────────────────────────────────────────────────────────────────────
 	onMount(async () => {
-		[d3, topojson] = await Promise.all([
-			import('d3'),
-			import('topojson-client')
-		]);
+		[d3, topojson] = await Promise.all([import('d3'), import('topojson-client')]);
 
 		// Size canvas for device pixel ratio (crisp on retina)
 		dpr = window.devicePixelRatio || 1;
-		W   = canvasEl.clientWidth  || window.innerWidth;
-		H   = canvasEl.clientHeight || window.innerHeight;
-		canvasEl.width  = W * dpr;
+		W = canvasEl.clientWidth || window.innerWidth;
+		H = canvasEl.clientHeight || window.innerHeight;
+		canvasEl.width = W * dpr;
 		canvasEl.height = H * dpr;
 
 		// Load single TopoJSON file (contains both layers)
@@ -345,12 +340,15 @@
 			return r.json();
 		});
 
-		mexicoFeatures  = topojson.feature(topo, topo.objects.states) as FeatureCollection;
+		mexicoFeatures = topojson.feature(topo, topo.objects.states) as FeatureCollection;
 		nayaritFeatures = topojson.feature(topo, topo.objects.municipalities) as FeatureCollection;
 
 		// Set up projection + canvas path generator
 		projection = d3.geoMercator().fitExtent(
-			[[PAD, PAD], [W - PAD, H - PAD]],
+			[
+				[PAD, PAD],
+				[W - PAD, H - PAD]
+			],
 			mexicoFeatures
 		);
 		const ctx = canvasEl.getContext('2d')!;
@@ -363,13 +361,19 @@
 
 		ro = new ResizeObserver(() => {
 			dpr = window.devicePixelRatio || 1;
-			W   = canvasEl.clientWidth;
-			H   = canvasEl.clientHeight;
-			canvasEl.width  = W * dpr;
+			W = canvasEl.clientWidth;
+			H = canvasEl.clientHeight;
+			canvasEl.width = W * dpr;
 			canvasEl.height = H * dpr;
 
 			// Refit to Mexico then re-apply current step instantly
-			projection.fitExtent([[PAD, PAD], [W - PAD, H - PAD]], mexicoFeatures);
+			projection.fitExtent(
+				[
+					[PAD, PAD],
+					[W - PAD, H - PAD]
+				],
+				mexicoFeatures
+			);
 			animateStep(currentStep, false);
 		});
 		ro.observe(canvasEl);
@@ -449,7 +453,9 @@
 		padding: 1.3rem 1.5rem;
 		backdrop-filter: blur(8px);
 		-webkit-backdrop-filter: blur(8px);
-		transition: left 0.5s ease, right 0.5s ease;
+		transition:
+			left 0.5s ease,
+			right 0.5s ease;
 	}
 
 	.geo-card.right-side {
@@ -502,7 +508,9 @@
 		gap: 0.5rem;
 		margin-bottom: 0.3rem;
 	}
-	.legend-row:last-child { margin-bottom: 0; }
+	.legend-row:last-child {
+		margin-bottom: 0;
+	}
 
 	.dot {
 		width: 10px;
@@ -525,7 +533,9 @@
 	}
 
 	/* ── Scroll spacer — 5 steps × 100vh ──────────────────────────────── */
-	.geo-spacer { height: 500vh; }
+	.geo-spacer {
+		height: 500vh;
+	}
 
 	@media (max-width: 640px) {
 		.geo-card,
@@ -535,6 +545,9 @@
 			max-width: none;
 			bottom: 2.5rem;
 		}
-		.geo-legend { top: 1rem; left: 1rem; }
+		.geo-legend {
+			top: 1rem;
+			left: 1rem;
+		}
 	}
 </style>
