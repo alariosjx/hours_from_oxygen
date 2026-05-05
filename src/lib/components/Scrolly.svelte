@@ -5,6 +5,7 @@
 <script lang="ts">
 	import { onDestroy, onMount, tick } from 'svelte';
 	import { browser } from '$app/environment';
+	export { asset } from '$app/environment';
 
 	import ScrollyStep from './scrolly/ScrollyStep.svelte';
 	import {
@@ -318,10 +319,7 @@
 				<div class="layer" class:active={i === bgIndex} aria-hidden="true">
 					{#if loadedIndices.has(i)}
 						{#if m.kind === 'image'}
-							<div
-								class="media image"
-								style={`background-image:url("${encodeURI(m.url)}")`}
-							></div>
+							<div class="media image" style={`background-image:url("${encodeURI(m.url)}")`}></div>
 						{:else}
 							<video
 								class="media video"
