@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { base } from '$app/paths';
 
 	// Canvas is 220vw wide. Elements use vw/vh for position and size.
 	// left/top = distance from canvas left/top edge
@@ -46,7 +47,7 @@
 			mediaType: 'image',
 			location: 'Mexico City',
 			date: 'Mar 20, 2020',
-			src: '/images/checking.jpeg',
+			src: base + '/images/checking.jpeg',
 			left: '2vw',
 			top: '12vh',
 			width: '60vw',
@@ -68,7 +69,7 @@
 			mediaType: 'image',
 			location: 'Puerto Vallarta',
 			date: 'January, 2021',
-			src: '/images/gaycruise.png',
+			src: base + '/images/gaycruise.png',
 			left: '55vw',
 			top: '18vh',
 			width: '35vw',
@@ -113,7 +114,7 @@
 			mediaType: 'image',
 			location: 'Mexico',
 			date: 'Jul 15, 2020',
-			src: '/images/reported.png',
+			src: base + '/images/reported.png',
 			caption: 'Cases spiked in various waves',
 			left: '108vw',
 			top: '2vh',
