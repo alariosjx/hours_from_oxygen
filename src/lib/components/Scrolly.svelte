@@ -300,13 +300,13 @@
 						{#if m.kind === 'image'}
 							<div
 								class="media image"
-								style={`background-image:url("${encodeURI(asset(m.url))}")`}
+								style={`background-image:url("${encodeURI(m.url)}")`}
 							></div>
 						{:else}
 							<video
 								class="media video"
 								bind:this={videoEls[i]}
-								src={asset(m.url)}
+								src={m.url}
 								muted
 								playsinline
 								preload="metadata"
