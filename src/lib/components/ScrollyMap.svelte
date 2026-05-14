@@ -1,5 +1,4 @@
 <script context="module" lang="ts">
-	// Empty module block — keeps this consistent with other glob-registered components.
 	// DocRenderer invokes this as [[ScrollyMap]] with no props.
 </script>
 
@@ -106,74 +105,10 @@
 		}
 	];
 
-	// ── Map constants ──────────────────────────────────────────────────────
-	// Bounds calibrated to fit the full Nayarit state outline
-	const B = {
-		minLat: 20.45,
-		maxLat: 23.2,
-		minLng: -106.2,
-		maxLng: -103.6
-	};
-	const W = 800,
-		H = 600;
+	// ── Visual config ──────────────────────────────────────────────────────
+	const W = 900,
+		H = 620; // SVG canvas size
 
-	function proj(lat: number, lng: number): [number, number] {
-		const x = ((lng - B.minLng) / (B.maxLng - B.minLng)) * W;
-		const y = H - ((lat - B.minLat) / (B.maxLat - B.minLat)) * H;
-		return [Math.round(x * 10) / 10, Math.round(y * 10) / 10];
-	}
-
-	// Nayarit state boundary (clockwise from NW)
-	const NAYARIT_BOUNDARY =
-		'M 147.7,26.2 L 200.0,21.8 L 230.8,30.5 L 307.7,48.0 L 384.6,61.1 L 455.4,76.4 L 516.9,98.2 L 560.0,120.0 L 584.6,148.4 L 621.5,185.5 L 652.3,222.5 L 701.5,266.2 L 732.3,309.8 L 744.6,353.5 L 732.3,397.1 L 713.8,440.7 L 683.1,475.6 L 652.3,506.2 L 590.8,541.1 L 529.2,556.4 L 455.4,562.9 L 393.8,556.4 L 332.3,549.8 L 270.8,541.1 L 209.2,519.3 L 160.0,497.5 L 129.2,462.5 L 116.9,418.9 L 98.5,375.3 L 86.2,331.6 L 67.7,288.0 L 55.4,244.4 L 46.2,200.7 L 55.4,157.1 L 67.7,113.5 L 86.2,82.9 L 116.9,54.5 L 147.7,26.2 Z';
-
-	// Major roads
-	const ROADS = [
-		{
-			id: 'mex15_free',
-			label: 'MEX-15 (Free highway)',
-			d: 'M 160.0,39.3 L 178.5,76.4 L 200.0,141.8 L 230.8,207.3 L 252.3,266.2 L 283.1,316.4 L 283.1,362.2 L 313.8,392.7 L 353.8,436.4 L 375.4,480.0 L 415.4,523.6',
-			toll: false
-		},
-		{
-			id: 'mex15d_toll',
-			label: 'MEX-15D (Toll highway — cuota)',
-			d: 'M 215.4,91.6 L 246.2,152.7 L 270.8,222.5 L 313.8,288.0 L 344.6,353.5 L 384.6,403.6 L 400.0,447.3 L 424.6,497.5',
-			toll: true
-		},
-		{
-			id: 'mex68',
-			label: 'MEX-68 (Tepic–Durango)',
-			d: 'M 403.1,370.9 L 492.3,360.0 L 569.2,349.1 L 621.5,338.2 L 670.8,322.9',
-			toll: false
-		},
-		{
-			id: 'mex161',
-			label: 'MEX-161 (Tepic–Acaponeta)',
-			d: 'M 403.1,370.9 L 400.0,322.9 L 393.8,279.3 L 384.6,235.6 L 344.6,192.0 L 307.7,148.4',
-			toll: false
-		},
-		{
-			id: 'coastal',
-			label: 'MEX-200 (Coastal road)',
-			d: 'M 252.3,523.6 L 230.8,480.0 L 221.5,436.4 L 209.2,392.7 L 190.8,362.2',
-			toll: false
-		}
-	];
-
-	// City labels
-	const CITIES = [
-		{ name: 'Tepic', lat: 21.5, lng: -104.89, capital: true },
-		{ name: 'Acaponeta', lat: 22.5, lng: -105.37, capital: false },
-		{ name: 'Ixtlán del Río', lat: 21.03, lng: -104.36, capital: false },
-		{ name: 'Bahía de Banderas', lat: 20.75, lng: -105.25, capital: false },
-		{ name: 'Santiago Ixcuintla', lat: 21.81, lng: -105.22, capital: false }
-	];
-
-	// Valle Verde story pin
-	const VALLE_VERDE = proj(21.054, -104.485);
-
-	// ── Color + style config ───────────────────────────────────────────────
 	const COLORS: Record<string, string> = {
 		imss_clinic: '#c8960a',
 		imss_hospital: '#e04040',
@@ -181,10 +116,10 @@
 		imss_bienestar_hospital: '#c89fe8',
 		ssa: '#4a9b7f',
 		issste: '#4a7fb5',
-		private: '#666',
-		private_hospital: '#888',
-		other: '#555',
-		other_hospital: '#777'
+		private: '#555',
+		private_hospital: '#777',
+		other: '#444',
+		other_hospital: '#666'
 	};
 
 	const LABELS: Record<string, string> = {
@@ -216,16 +151,103 @@
 		return 0.06;
 	}
 
-	// ── Scroll state (mirrors Scrolly.svelte exactly) ─────────────────────
+	// ── State ──────────────────────────────────────────────────────────────
 	let facilities: Facility[] = [];
+	let boundaryGeoJSON: any = null; // raw GeoJSON, passed to D3
 	let isLoading = true;
-	let bgIndex = 0;
-	let released = false;
-	let prevCarryOut = false;
-	let carryOut = false;
-	let rafPending = false;
-	let nearViewport = false;
+	let mapReady = false; // true once D3 has drawn the SVG
 
+	// D3-projected data (populated after load)
+	let boundaryPaths: string[] = [];
+	let projectedFacilities: (Facility & { x: number; y: number })[] = [];
+	let roadPaths: { d: string; toll: boolean; label: string }[] = [];
+	let cityPoints: { name: string; x: number; y: number; capital: boolean }[] = [];
+	let valleVerde: [number, number] = [0, 0];
+
+	// Road waypoints [lat, lng]
+	const ROAD_WAYPOINTS = [
+		{
+			label: 'MEX-15 (Free highway)',
+			toll: false,
+			pts: [
+				[23.02, -105.68],
+				[22.85, -105.62],
+				[22.55, -105.55],
+				[22.25, -105.45],
+				[21.98, -105.38],
+				[21.75, -105.28],
+				[21.54, -105.28],
+				[21.4, -105.18],
+				[21.2, -105.05],
+				[21.0, -104.98],
+				[20.8, -104.85]
+			] as [number, number][]
+		},
+		{
+			label: 'MEX-15D (Toll — cuota)',
+			toll: true,
+			pts: [
+				[22.78, -105.5],
+				[22.5, -105.4],
+				[22.18, -105.32],
+				[21.88, -105.18],
+				[21.58, -105.08],
+				[21.35, -104.95],
+				[21.15, -104.9],
+				[20.92, -104.82]
+			] as [number, number][]
+		},
+		{
+			label: 'MEX-68 (Tepic–Durango)',
+			toll: false,
+			pts: [
+				[21.5, -104.89],
+				[21.55, -104.6],
+				[21.6, -104.35],
+				[21.65, -104.18],
+				[21.72, -104.02]
+			] as [number, number][]
+		},
+		{
+			label: 'MEX-161 (Tepic–Acaponeta)',
+			toll: false,
+			pts: [
+				[21.5, -104.89],
+				[21.72, -104.9],
+				[21.92, -104.92],
+				[22.12, -104.95],
+				[22.32, -105.08],
+				[22.52, -105.2]
+			] as [number, number][]
+		},
+		{
+			label: 'MEX-200 (Coastal road)',
+			toll: false,
+			pts: [
+				[20.8, -105.38],
+				[21.0, -105.45],
+				[21.2, -105.48],
+				[21.4, -105.52],
+				[21.54, -105.58]
+			] as [number, number][]
+		}
+	];
+
+	const CITY_DEFS = [
+		{ name: 'Tepic', lat: 21.5, lng: -104.89, capital: true },
+		{ name: 'Acaponeta', lat: 22.5, lng: -105.37, capital: false },
+		{ name: 'Ixtlán del Río', lat: 21.03, lng: -104.36, capital: false },
+		{ name: 'Bahía de Banderas', lat: 20.75, lng: -105.25, capital: false },
+		{ name: 'Santiago Ixcuintla', lat: 21.81, lng: -105.22, capital: false }
+	];
+
+	// ── Scroll state ───────────────────────────────────────────────────────
+	let bgIndex = 0;
+	let released = false,
+		prevCarryOut = false,
+		carryOut = false;
+	let rafPending = false,
+		nearViewport = false;
 	let sectionEl: HTMLElement | null = null;
 	let textBoxEls: (HTMLElement | null)[] = new Array(STEPS.length).fill(null);
 	let tooltip: { x: number; y: number; f: Facility } | null = null;
@@ -253,8 +275,7 @@
 			const el = textBoxEls[i];
 			if (!el) continue;
 			const top = el.getBoundingClientRect().top;
-			const threshold = i === lastIdx ? carryY : 1;
-			if (top <= threshold) passed = i;
+			if (top <= (i === lastIdx ? carryY : 1)) passed = i;
 			else break;
 		}
 		return passed;
@@ -263,13 +284,11 @@
 	function updateCarryOut() {
 		const el = textBoxEls[STEPS.length - 1];
 		if (!el) {
-			carryOut = false;
-			released = false;
+			carryOut = released = false;
 			prevCarryOut = false;
 			return;
 		}
-		const top = el.getBoundingClientRect().top;
-		carryOut = top <= window.innerHeight * CARRY_POINT;
+		carryOut = el.getBoundingClientRect().top <= window.innerHeight * CARRY_POINT;
 		if (carryOut && !prevCarryOut) released = true;
 		if (!carryOut && prevCarryOut) released = false;
 		prevCarryOut = carryOut;
@@ -277,8 +296,7 @@
 
 	function updateFromScroll() {
 		rafPending = false;
-		const passed = computePassedIndex();
-		bgIndex = Math.min(STEPS.length - 1, Math.max(0, passed + 1));
+		bgIndex = Math.min(STEPS.length - 1, Math.max(0, computePassedIndex() + 1));
 		updateCarryOut();
 	}
 
@@ -288,6 +306,68 @@
 		requestAnimationFrame(updateFromScroll);
 	}
 
+	// ── D3 projection setup ───────────────────────────────────────────────
+	// Called once data is loaded. Uses d3.geoMercator().fitSize() so the
+	// boundary GeoJSON defines the projection — dots use the SAME projector.
+	async function setupProjection(d3: any, geo: any) {
+		// Build a combined FeatureCollection for fitSize — use all municipality polygons
+		const projector = d3.geoMercator().fitSize([W, H], geo);
+
+		const pathGen = d3.geoPath().projection(projector);
+
+		// Boundary paths — one per feature, guarded so one bad polygon never kills the map
+		if (geo.type === 'FeatureCollection') {
+			boundaryPaths = geo.features
+				.map((f: any) => {
+					try {
+						return pathGen(f);
+					} catch {
+						return '';
+					}
+				})
+				.filter(Boolean);
+		} else {
+			try {
+				boundaryPaths = [pathGen(geo)].filter(Boolean);
+			} catch {
+				boundaryPaths = [];
+			}
+		}
+
+		// Project facilities using the SAME projector
+		projectedFacilities = facilities.map((f) => {
+			const [x, y] = projector([f.lng, f.lat]) ?? [0, 0];
+			return { ...f, x: Math.round(x * 10) / 10, y: Math.round(y * 10) / 10 };
+		});
+
+		// Project road waypoints
+		roadPaths = ROAD_WAYPOINTS.map((road) => {
+			const d =
+				'M ' +
+				road.pts
+					.map(([lat, lng]) => {
+						const [x, y] = projector([lng, lat]) ?? [0, 0];
+						return `${Math.round(x)},${Math.round(y)}`;
+					})
+					.join(' L ');
+			return { d, toll: road.toll, label: road.label };
+		});
+
+		// Project cities
+		cityPoints = CITY_DEFS.map((c) => {
+			const [x, y] = projector([c.lng, c.lat]) ?? [0, 0];
+			return { name: c.name, x: Math.round(x), y: Math.round(y), capital: c.capital };
+		});
+
+		// Project Valle Verde
+		const [vx, vy] = projector([-104.485, 21.054]) ?? [0, 0];
+		valleVerde = [Math.round(vx), Math.round(vy)];
+
+		mapReady = true;
+	}
+
+	// ── Lifecycle ──────────────────────────────────────────────────────────
+	let d3Loaded = false;
 	let observer: IntersectionObserver | null = null;
 
 	onMount(async () => {
@@ -303,10 +383,21 @@
 				nearViewport = true;
 
 				try {
-					const res = await fetch(`${base}/data/nayarit_medical_centers.json`);
-					facilities = await res.json();
+					// Load D3, data, and GeoJSON in parallel
+					const [, facRes, geoRes] = await Promise.all([
+						loadD3(),
+						fetch(`${base}/data/nayarit_medical_centers.json`),
+						fetch(`${base}/data/nayarit_municipalities.geojson`)
+					]);
+
+					facilities = await facRes.json();
+					const geo = await geoRes.json();
+					boundaryGeoJSON = geo;
+
+					const d3 = (window as any).d3;
+					await setupProjection(d3, geo);
 				} catch (e) {
-					console.error('[ScrollyMap] Failed to load:', e);
+					console.error('[ScrollyMap] load error:', e);
 				} finally {
 					isLoading = false;
 				}
@@ -320,6 +411,17 @@
 		if (sectionEl) observer.observe(sectionEl);
 	});
 
+	function loadD3(): Promise<void> {
+		if ((window as any).d3) return Promise.resolve();
+		return new Promise((resolve, reject) => {
+			const s = document.createElement('script');
+			s.src = 'https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js';
+			s.onload = () => resolve();
+			s.onerror = reject;
+			document.head.appendChild(s);
+		});
+	}
+
 	onDestroy(() => {
 		if (browser) {
 			window.removeEventListener('scroll', onScrollOrResize);
@@ -328,13 +430,8 @@
 		observer?.disconnect();
 	});
 
-	// ── Derived ────────────────────────────────────────────────────────────
+	// ── Reactive ───────────────────────────────────────────────────────────
 	$: activeStep = STEPS[bgIndex] ?? STEPS[0];
-
-	$: projected = facilities.map((f) => {
-		const [x, y] = proj(f.lat, f.lng);
-		return { ...f, x, y };
-	});
 
 	$: categoryCounts = (() => {
 		const c: Record<string, number> = {};
@@ -355,7 +452,7 @@
 		if (id === 'explore')
 			return Object.entries(filterState)
 				.filter(([, v]) => v)
-				.reduce((acc, [k]) => acc + (categoryCounts[k] ?? 0), 0);
+				.reduce((a, [k]) => a + (categoryCounts[k] ?? 0), 0);
 		return 0;
 	})();
 
@@ -371,18 +468,15 @@
 	})();
 </script>
 
-<!-- ═══════════════════════════════════════════════════════════════════
-       TEMPLATE
-       Full-bleed override: negative margins break out of content-wrapper.
-       Mirrors Scrolly.svelte's sticky-bg + scrolly-steps DOM structure.
-  ════════════════════════════════════════════════════════════════════ -->
 <div class="scrolly-map-bleed" bind:this={sectionEl}>
-	<!-- Sticky map — same as .scrolly-bg in Scrolly.svelte -->
+	<!-- Sticky map -->
 	<div class={'scrolly-map-bg' + (released ? ' unstick' : '')}>
-		{#if !nearViewport || isLoading}
+		{#if !nearViewport || isLoading || !mapReady}
 			<div class="map-skeleton">
 				<div class="map-spinner"></div>
-				<p class="map-skeleton-label">Loading Nayarit healthcare map…</p>
+				<p class="map-skeleton-label">
+					{isLoading ? 'Loading Nayarit healthcare map…' : 'Preparing map…'}
+				</p>
 			</div>
 		{:else}
 			<svg
@@ -392,122 +486,119 @@
 				aria-label="Map of Nayarit public healthcare facilities"
 				role="img"
 			>
-				<!-- ── Base layer: sky gradient ── -->
 				<defs>
-					<linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+					<linearGradient id="smSkyGrad" x1="0" y1="0" x2="0" y2="1">
 						<stop offset="0%" stop-color="#0d0520" />
 						<stop offset="100%" stop-color="#1a0a38" />
 					</linearGradient>
-					<filter id="glow">
-						<feGaussianBlur stdDeviation="2" result="coloredBlur" />
-						<feMerge><feMergeNode in="coloredBlur" /><feMergeNode in="SourceGraphic" /></feMerge>
-					</filter>
 				</defs>
 
-				<rect width={W} height={H} fill="url(#skyGrad)" />
+				<rect width={W} height={H} fill="url(#smSkyGrad)" />
 
-				<!-- ── Nayarit state boundary ── -->
-				<!-- Background fill — interior of state -->
-				<path d={NAYARIT_BOUNDARY} fill="rgba(42,14,88,0.35)" stroke="none" />
-				<!-- Outer glow -->
-				<path
-					d={NAYARIT_BOUNDARY}
-					fill="none"
-					stroke="rgba(123,79,166,0.25)"
-					stroke-width="6"
-					stroke-linejoin="round"
-				/>
-				<!-- Crisp border -->
-				<path
-					d={NAYARIT_BOUNDARY}
-					fill="none"
-					stroke="rgba(123,79,166,0.65)"
-					stroke-width="1.5"
-					stroke-linejoin="round"
-				/>
-				<!-- State label -->
-				<text
-					x="200"
-					y="290"
-					fill="rgba(123,79,166,0.3)"
-					font-family="'Syne', sans-serif"
-					font-size="22"
-					font-weight="800"
-					letter-spacing="0.25em"
-					transform="rotate(-65, 200, 290)">NAYARIT</text
-				>
+				<!-- Municipality fills — D3-projected, guaranteed aligned -->
+				{#each boundaryPaths as d}
+					<path {d} fill="rgba(42,14,88,0.28)" stroke="none" />
+				{/each}
 
-				<!-- ── Roads ── -->
-				{#each ROADS as road}
-					<!-- Road shadow -->
+				<!-- Municipality border lines -->
+				{#each boundaryPaths as d}
+					<path
+						{d}
+						fill="none"
+						stroke="rgba(123,79,166,0.22)"
+						stroke-width="0.7"
+						stroke-linejoin="round"
+					/>
+				{/each}
+
+				<!-- Outer glow (same paths, wide soft stroke) -->
+				{#each boundaryPaths as d}
+					<path
+						{d}
+						fill="none"
+						stroke="rgba(123,79,166,0.1)"
+						stroke-width="7"
+						stroke-linejoin="round"
+					/>
+				{/each}
+
+				<!-- Crisp state border -->
+				{#each boundaryPaths as d}
+					<path
+						{d}
+						fill="none"
+						stroke="rgba(155,111,204,0.7)"
+						stroke-width="1.3"
+						stroke-linejoin="round"
+					/>
+				{/each}
+
+				<!-- Roads -->
+				{#each roadPaths as road}
 					<path
 						d={road.d}
 						fill="none"
 						stroke="rgba(0,0,0,0.4)"
-						stroke-width={road.toll ? 3 : 2}
+						stroke-width={road.toll ? 3.5 : 2.5}
 						stroke-linecap="round"
-						stroke-linejoin="round"
 					/>
-					<!-- Road line -->
 					<path
 						d={road.d}
 						fill="none"
-						stroke={road.toll ? '#8b3a3a' : 'rgba(180,150,80,0.45)'}
-						stroke-width={road.toll ? 2 : 1.2}
+						stroke={road.toll ? '#8b3a3a' : 'rgba(180,150,70,0.5)'}
+						stroke-width={road.toll ? 2 : 1.3}
 						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-dasharray={road.toll ? '8,4' : 'none'}
-						opacity={road.toll ? 0.8 : 0.6}
+						stroke-dasharray={road.toll ? '9,5' : 'none'}
+						opacity={road.toll ? 0.9 : 0.65}
 					/>
 				{/each}
 
-				<!-- ── City labels ── -->
-				{#each CITIES as city}
-					{@const [cx, cy] = proj(city.lat, city.lng)}
+				<!-- City dots + labels -->
+				{#each cityPoints as city}
 					<circle
-						{cx}
-						{cy}
+						cx={city.x}
+						cy={city.y}
 						r={city.capital ? 4 : 2.5}
 						fill={city.capital ? '#c8960a' : 'rgba(200,150,10,0.5)'}
-						opacity="0.7"
+						opacity="0.8"
 					/>
 					<text
-						x={cx + 7}
-						y={cy + 4}
-						fill={city.capital ? 'rgba(200,150,10,0.7)' : 'rgba(200,150,10,0.4)'}
+						x={city.x + 7}
+						y={city.y + 4}
+						fill={city.capital ? 'rgba(200,150,10,0.8)' : 'rgba(200,150,10,0.45)'}
 						font-family="'Syne', sans-serif"
 						font-size={city.capital ? 9 : 7.5}
 						font-weight={city.capital ? '700' : '400'}
-						letter-spacing="0.06em">{city.name}</text
+						letter-spacing="0.05em">{city.name}</text
 					>
 				{/each}
 
-				<!-- ── Facility dots: dim layer ── -->
+				<!-- Dim dots -->
 				<g>
-					{#each projected as f (f.clues)}
+					{#each projectedFacilities as f (f.clues)}
 						{@const op = getDotOpacity(f.category, activeStep.id)}
-						{#if op < 0.5 && op > 0}
+						{#if op > 0 && op < 0.5}
 							<circle
 								cx={f.x}
 								cy={f.y}
 								r={dotRadius(f.category)}
-								fill={COLORS[f.category] ?? '#666'}
+								fill={COLORS[f.category] ?? '#555'}
 								opacity={op}
 							/>
 						{/if}
 					{/each}
 				</g>
 
-				<!-- ── Facility dots: highlight layer ── -->
+				<!-- Highlight dots -->
 				<g>
-					{#each projected as f (f.clues)}
+					{#each projectedFacilities as f (f.clues)}
 						{@const op = getDotOpacity(f.category, activeStep.id)}
 						{#if op >= 0.5}
 							<circle
 								cx={f.x}
 								cy={f.y}
 								r={dotRadius(f.category)}
-								fill={COLORS[f.category] ?? '#666'}
+								fill={COLORS[f.category] ?? '#555'}
 								opacity={op}
 								class="dot-active"
 								role="img"
@@ -523,67 +614,60 @@
 					{/each}
 				</g>
 
-				<!-- ── Valle Verde story pin ── -->
+				<!-- Valle Verde story pin -->
 				{#if bgIndex > 0}
 					<g class="story-pin">
 						<circle
-							cx={VALLE_VERDE[0]}
-							cy={VALLE_VERDE[1]}
-							r="18"
+							cx={valleVerde[0]}
+							cy={valleVerde[1]}
+							r="20"
 							fill="none"
 							stroke="#c8960a"
 							stroke-width="1"
-							opacity="0.2"
+							opacity="0.15"
 						/>
 						<circle
-							cx={VALLE_VERDE[0]}
-							cy={VALLE_VERDE[1]}
-							r="10"
+							cx={valleVerde[0]}
+							cy={valleVerde[1]}
+							r="11"
 							fill="none"
 							stroke="#c8960a"
 							stroke-width="1.5"
-							opacity="0.5"
+							opacity="0.45"
 						/>
-						<circle
-							cx={VALLE_VERDE[0]}
-							cy={VALLE_VERDE[1]}
-							r="4"
-							fill="#c8960a"
-							opacity="0.95"
-							filter="url(#glow)"
-						/>
+						<circle cx={valleVerde[0]} cy={valleVerde[1]} r="4.5" fill="#c8960a" opacity="0.95" />
 						<text
-							x={VALLE_VERDE[0] + 14}
-							y={VALLE_VERDE[1] - 4}
+							x={valleVerde[0] + 15}
+							y={valleVerde[1] - 4}
 							fill="#c8960a"
 							font-family="'Crimson Text', Georgia, serif"
 							font-style="italic"
-							font-size="11"
+							font-size="11.5"
 							opacity="0.95">Valle Verde</text
 						>
 						<text
-							x={VALLE_VERDE[0] + 14}
-							y={VALLE_VERDE[1] + 8}
-							fill="rgba(200,150,10,0.55)"
+							x={valleVerde[0] + 15}
+							y={valleVerde[1] + 9}
+							fill="rgba(200,150,10,0.5)"
 							font-family="'Syne', sans-serif"
-							font-size="7.5"
+							font-size="8"
 							letter-spacing="0.1em">AHUACATLÁN</text
 						>
 					</g>
 				{/if}
 
-				<!-- ── Tooltip ── -->
+				<!-- Tooltip -->
 				{#if tooltip}
-					{@const tx = tooltip.x > W - 195 ? tooltip.x - 192 : tooltip.x + 12}
-					{@const ty = tooltip.y > H - 78 ? tooltip.y - 76 : tooltip.y + 8}
+					{@const tx = tooltip.x > W - 200 ? tooltip.x - 196 : tooltip.x + 12}
+					{@const ty = tooltip.y > H - 80 ? tooltip.y - 78 : tooltip.y + 8}
 					<g>
 						<rect
 							x={tx - 2}
 							y={ty - 2}
-							width="190"
-							height="72"
+							width="194"
+							height="74"
 							rx="3"
-							fill="rgba(10,4,20,0.95)"
+							fill="rgba(8,3,18,0.96)"
 							stroke={COLORS[tooltip.f.category] ?? '#c8960a'}
 							stroke-width="1"
 						/>
@@ -594,8 +678,8 @@
 							font-family="'Syne', sans-serif"
 							font-size="8.5"
 							font-weight="700"
-							>{tooltip.f.name.length > 26
-								? tooltip.f.name.slice(0, 25) + '…'
+							>{tooltip.f.name.length > 27
+								? tooltip.f.name.slice(0, 26) + '…'
 								: tooltip.f.name}</text
 						>
 						<text
@@ -603,7 +687,7 @@
 							y={ty + 29}
 							fill="rgba(255,255,255,0.5)"
 							font-family="'Syne', sans-serif"
-							font-size="7.5">{tooltip.f.typology.slice(0, 32)}</text
+							font-size="7.5">{tooltip.f.typology.slice(0, 33)}</text
 						>
 						<text
 							x={tx + 8}
@@ -614,13 +698,13 @@
 						>
 						<circle
 							cx={tx + 12}
-							cy={ty + 58}
+							cy={ty + 59}
 							r="4"
 							fill={COLORS[tooltip.f.category] ?? '#c8960a'}
 						/>
 						<text
 							x={tx + 22}
-							y={ty + 62}
+							y={ty + 63}
 							fill="rgba(255,255,255,0.35)"
 							font-family="'Syne', sans-serif"
 							font-size="7">{LABELS[tooltip.f.category] ?? ''}</text
@@ -629,7 +713,7 @@
 				{/if}
 			</svg>
 
-			<!-- Map overlay: legend + count -->
+			<!-- Legend overlay -->
 			<div class="map-overlay">
 				<div class="map-legend">
 					{#each legendItems as cat}
@@ -655,7 +739,7 @@
 		{/if}
 	</div>
 
-	<!-- Scrolly steps — same as .scrolly-steps in Scrolly.svelte -->
+	<!-- Steps -->
 	<div class="scrolly-map-steps">
 		{#each STEPS as step, i}
 			{#if step.id !== 'explore'}
@@ -664,7 +748,6 @@
 						<div class="step-num">{String(i + 1).padStart(2, '0')}</div>
 						<h3 class="step-hed">{step.headline}</h3>
 						<p class="step-body">{step.body}</p>
-
 						{#if step.stats}
 							<div class="step-stats">
 								{#each step.stats as s}
@@ -675,28 +758,23 @@
 								{/each}
 							</div>
 						{/if}
-
 						{#if step.source}
 							<p class="step-source">
 								{#if step.sourceUrl}
-									<a href={step.sourceUrl} target="_blank" rel="noopener noreferrer">
-										{step.source} ↗
-									</a>
-								{:else}
-									{step.source}
-								{/if}
+									<a href={step.sourceUrl} target="_blank" rel="noopener noreferrer"
+										>{step.source} ↗</a
+									>
+								{:else}{step.source}{/if}
 							</p>
 						{/if}
 					</div>
 				</div>
 			{:else}
-				<!-- Explore / filter step -->
 				<div class="map-step map-step--explore" bind:this={textBoxEls[i]}>
 					<div class="step-box step-box--wide">
 						<div class="step-num">{String(i + 1).padStart(2, '0')}</div>
 						<h3 class="step-hed">{step.headline}</h3>
 						<p class="step-body">{step.body}</p>
-
 						<div class="filter-list">
 							{#each Object.entries(LABELS) as [cat, label]}
 								<label class="filter-item" class:filter-item--on={filterState[cat]}>
@@ -707,7 +785,6 @@
 								</label>
 							{/each}
 						</div>
-
 						<div class="sources-block">
 							<p class="sources-hed">Data Sources</p>
 							<ul class="sources-list">
@@ -716,40 +793,37 @@
 										href="https://www.gob.mx/salud/documentos/datos-abiertos-de-establecimientos-de-salud-clues"
 										target="_blank"
 										rel="noopener noreferrer"
+										>CLUES — Catálogo Nacional de Establecimientos de Salud ↗</a
 									>
-										CLUES — Catálogo Nacional de Establecimientos de Salud ↗
-									</a>
 								</li>
 								<li>
 									<a
 										href="https://www.imss.gob.mx/directorio?dom_estado=Nayarit&tipo_de_servicio=Cl%C3%ADnica"
 										target="_blank"
-										rel="noopener noreferrer"
+										rel="noopener noreferrer">IMSS Directorio — Clínicas, Nayarit ↗</a
 									>
-										IMSS Directorio — Clínicas, Nayarit ↗
-									</a>
 								</li>
 								<li>
 									<a
 										href="https://www.imss.gob.mx/directorio?dom_estado=Nayarit&tipo_de_servicio=Hospital"
 										target="_blank"
-										rel="noopener noreferrer"
+										rel="noopener noreferrer">IMSS Directorio — Hospitales, Nayarit ↗</a
 									>
-										IMSS Directorio — Hospitales, Nayarit ↗
-									</a>
 								</li>
 								<li>
 									<a
 										href="https://www.imss.gob.mx/directorio?dom_estado=Nayarit&tipo_de_servicio=IMSS%20Bienestar"
 										target="_blank"
-										rel="noopener noreferrer"
+										rel="noopener noreferrer">IMSS-Bienestar Directorio, Nayarit ↗</a
 									>
-										IMSS-Bienestar Directorio, Nayarit ↗
-									</a>
 								</li>
 								<li>
-									ANEXO 1 — Listado Oficial de Unidades Transferidas al IMSS-Bienestar, Nayarit (231
-									unidades, Gobierno de México, 2023)
+									INEGI Marco Geoestadístico 2023 — Shapefile 18mun (Nayarit municipalities,
+									LCC→WGS84)
+								</li>
+								<li>
+									ANEXO 1 — Listado Oficial de Unidades Transferidas al IMSS-Bienestar, Nayarit
+									(2023)
 								</li>
 							</ul>
 						</div>
@@ -761,22 +835,13 @@
 </div>
 
 <style>
-	/* ═══════════════════════════════════════════════════════════════════
-       FULL BLEED — breaks out of .content-wrapper's Bootstrap column.
-       Uses negative margins matching the column's left offset.
-       This is the same technique used by .full-bleed in Geography.svelte.
-    ════════════════════════════════════════════════════════════════════ */
 	.scrolly-map-bleed {
 		position: relative;
-		/* Break out of any centered container */
 		width: 100vw;
 		left: 50%;
 		margin-left: -50vw;
-		/* Reset so content inside uses normal flow */
 		box-sizing: border-box;
 	}
-
-	/* ── Sticky map background — mirrors .scrolly-bg exactly ── */
 	.scrolly-map-bg {
 		position: sticky;
 		top: 0;
@@ -788,19 +853,15 @@
 		background: #0d0520;
 		margin-bottom: 2rem;
 	}
-
 	.scrolly-map-bg.unstick {
 		position: relative;
 	}
-
-	/* ── SVG fills entire sticky container ── */
 	.map-svg {
 		width: 100%;
 		height: 100%;
 		display: block;
 	}
 
-	/* ── Skeleton ── */
 	.map-skeleton {
 		width: 100%;
 		height: 100%;
@@ -811,7 +872,6 @@
 		gap: 1.25rem;
 		background: #0d0520;
 	}
-
 	.map-spinner {
 		width: 52px;
 		height: 52px;
@@ -820,13 +880,11 @@
 		border-top-color: #c8960a;
 		animation: spin 0.9s linear infinite;
 	}
-
 	@keyframes spin {
 		to {
 			transform: rotate(360deg);
 		}
 	}
-
 	.map-skeleton-label {
 		font-family: 'Syne', sans-serif;
 		font-size: 0.62rem;
@@ -836,17 +894,14 @@
 		margin: 0;
 	}
 
-	/* ── Interactive dots ── */
 	.dot-active {
 		cursor: pointer;
 		transition: opacity 0.4s ease;
 	}
 	.dot-active:hover {
 		opacity: 1 !important;
-		filter: brightness(1.4);
+		filter: brightness(1.5);
 	}
-
-	/* ── Valle Verde pin pulse ── */
 	.story-pin {
 		animation: pinPulse 2.4s ease-in-out infinite;
 	}
@@ -856,11 +911,10 @@
 			opacity: 1;
 		}
 		50% {
-			opacity: 0.65;
+			opacity: 0.6;
 		}
 	}
 
-	/* ── Map overlay (bottom-left) ── */
 	.map-overlay {
 		position: absolute;
 		bottom: 1.5rem;
@@ -870,27 +924,23 @@
 		gap: 2.5rem;
 		pointer-events: none;
 	}
-
 	.map-legend {
 		display: flex;
 		flex-direction: column;
 		gap: 0.28rem;
 	}
-
 	.legend-row,
 	.legend-road-row {
 		display: flex;
 		align-items: center;
 		gap: 0.4rem;
 	}
-
 	.legend-dot {
 		width: 8px;
 		height: 8px;
 		border-radius: 50%;
 		flex-shrink: 0;
 	}
-
 	.legend-road {
 		width: 18px;
 		height: 2px;
@@ -898,12 +948,10 @@
 	}
 	.legend-road--toll {
 		background: #8b3a3a;
-		border-top: 1px dashed #8b3a3a;
 	}
 	.legend-road--free {
-		background: rgba(180, 150, 80, 0.55);
+		background: rgba(180, 150, 70, 0.6);
 	}
-
 	.legend-label {
 		font-family: 'Syne', sans-serif;
 		font-size: 0.57rem;
@@ -911,14 +959,12 @@
 		text-transform: uppercase;
 		color: rgba(255, 255, 255, 0.45);
 	}
-
 	.map-count {
 		display: flex;
 		flex-direction: column;
 		align-items: flex-end;
 		gap: 0.1rem;
 	}
-
 	.count-n {
 		font-family: 'Playfair Display', Georgia, serif;
 		font-size: 2.4rem;
@@ -926,7 +972,6 @@
 		color: rgba(200, 150, 10, 0.65);
 		line-height: 1;
 	}
-
 	.count-label {
 		font-family: 'Syne', sans-serif;
 		font-size: 0.52rem;
@@ -935,16 +980,12 @@
 		color: rgba(255, 255, 255, 0.2);
 	}
 
-	/* ── Steps column — same as .scrolly-steps ── */
 	.scrolly-map-steps {
 		position: relative;
 		z-index: 1;
 		pointer-events: none;
-		/* Negative margin pulls steps up to overlay the sticky bg */
 		margin-top: -100vh;
 	}
-
-	/* ── Individual step ── */
 	.map-step {
 		min-height: 100vh;
 		display: flex;
@@ -952,35 +993,27 @@
 		padding: 2rem 3rem;
 		pointer-events: none;
 	}
-
-	/* Explore step: right-aligned */
 	.map-step--explore {
 		justify-content: flex-end;
 	}
-
-	/* ── Step card ── */
 	.step-box {
 		background: rgba(10, 4, 20, 0.86);
 		backdrop-filter: blur(14px);
 		-webkit-backdrop-filter: blur(14px);
 		border: 1px solid rgba(123, 79, 166, 0.2);
 		border-radius: 4px;
-		padding: 1.75rem 1.75rem;
+		padding: 1.75rem;
 		max-width: 360px;
 		pointer-events: all;
 		box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
 		transition: border-color 0.3s ease;
 	}
-
 	.step-box--wide {
 		max-width: 420px;
 	}
-
 	.map-step--active .step-box {
 		border-color: rgba(200, 150, 10, 0.3);
 	}
-
-	/* ── Step typography ── */
 	.step-num {
 		font-family: 'Syne', sans-serif;
 		font-size: 0.56rem;
@@ -990,7 +1023,6 @@
 		margin-bottom: 0.55rem;
 		text-transform: uppercase;
 	}
-
 	.step-hed {
 		font-family: 'Playfair Display', Georgia, serif;
 		font-size: clamp(1.05rem, 2vw, 1.4rem);
@@ -999,7 +1031,6 @@
 		line-height: 1.25;
 		margin: 0 0 0.8rem;
 	}
-
 	.step-body {
 		font-family: 'Source Serif 4', Georgia, serif;
 		font-size: 0.88rem;
@@ -1007,8 +1038,6 @@
 		color: rgba(255, 255, 255, 0.65);
 		margin: 0 0 1rem;
 	}
-
-	/* ── Stats ── */
 	.step-stats {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
@@ -1017,13 +1046,11 @@
 		padding-top: 0.8rem;
 		margin-bottom: 0.8rem;
 	}
-
 	.step-stat {
 		display: flex;
 		flex-direction: column;
 		gap: 0.12rem;
 	}
-
 	.stat-n {
 		font-family: 'Playfair Display', serif;
 		font-size: 1.5rem;
@@ -1031,7 +1058,6 @@
 		color: #c8960a;
 		line-height: 1;
 	}
-
 	.stat-l {
 		font-family: 'Syne', sans-serif;
 		font-size: 0.53rem;
@@ -1040,8 +1066,6 @@
 		color: rgba(255, 255, 255, 0.35);
 		line-height: 1.3;
 	}
-
-	/* ── Source ── */
 	.step-source {
 		font-family: 'Syne', sans-serif;
 		font-size: 0.56rem;
@@ -1060,15 +1084,12 @@
 		color: #c8960a;
 		text-decoration: underline;
 	}
-
-	/* ── Filter toggles ── */
 	.filter-list {
 		display: flex;
 		flex-direction: column;
 		gap: 0.25rem;
 		margin: 0.85rem 0;
 	}
-
 	.filter-item {
 		display: flex;
 		align-items: center;
@@ -1091,14 +1112,12 @@
 	.filter-item input {
 		display: none;
 	}
-
 	.filter-swatch {
 		width: 10px;
 		height: 10px;
 		border-radius: 50%;
 		flex-shrink: 0;
 	}
-
 	.filter-name {
 		flex: 1;
 		font-family: 'Syne', sans-serif;
@@ -1106,7 +1125,6 @@
 		letter-spacing: 0.05em;
 		color: rgba(255, 255, 255, 0.72);
 	}
-
 	.filter-n {
 		font-family: 'Syne', sans-serif;
 		font-size: 0.6rem;
@@ -1114,14 +1132,11 @@
 		min-width: 26px;
 		text-align: right;
 	}
-
-	/* ── Sources ── */
 	.sources-block {
 		border-top: 1px solid rgba(255, 255, 255, 0.06);
 		padding-top: 0.9rem;
 		margin-top: 0.3rem;
 	}
-
 	.sources-hed {
 		font-family: 'Syne', sans-serif;
 		font-size: 0.56rem;
@@ -1130,7 +1145,6 @@
 		color: rgba(200, 150, 10, 0.45);
 		margin: 0 0 0.45rem;
 	}
-
 	.sources-list {
 		list-style: none;
 		padding: 0;
@@ -1139,14 +1153,12 @@
 		flex-direction: column;
 		gap: 0.3rem;
 	}
-
 	.sources-list li {
 		font-family: 'Syne', sans-serif;
 		font-size: 0.58rem;
 		color: rgba(255, 255, 255, 0.24);
 		line-height: 1.5;
 	}
-
 	.sources-list a {
 		color: rgba(200, 150, 10, 0.45);
 		text-decoration: none;
@@ -1155,8 +1167,6 @@
 		color: #c8960a;
 		text-decoration: underline;
 	}
-
-	/* ── Responsive ── */
 	@media (max-width: 767px) {
 		.map-step {
 			align-items: flex-end;
