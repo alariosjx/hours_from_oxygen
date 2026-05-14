@@ -17,8 +17,8 @@
     "name": "ImageEmbed",
     "attrs": {
       "src": "/images/abuelos1.jpg",
-      "alt": "Jose y Augustina Jimenez-Delgado",
-      "caption": "A picture frame with Jose Jimenez and Augustina Delgado together, taken in March 2026 in Valle Verde, Mexico.",
+      "alt": "A picture with Jose y Augustina Jimenez-Delgado",
+      "caption": "A picture frame with Jose Jimenez and Augustina Delgado together, taken in March 2026 in Valle Verde, Mexico. Credit: Andres Jimenez Larios",
       "size": "medium"
     }
   },
@@ -33,7 +33,7 @@
   },
   {
     "type": "html",
-    "html": ""
+    "html": "<p>The hour-long drive to <em>Ixtlan del Rio</em>&nbsp;- a city of 29,000 - paid off. Jose was admitted into the local branch of the <em>Instituto Mexicano del Seguro Social - Bienestar, </em>commonly referred to as IMSS-Bienestar --&nbsp;the largest publicly funded healthcare system in Mexico. Despite being admitted, his health continued to decline. On January 9, 2021, Jose died.</p>"
   },
   {
     "type": "shortcode",
@@ -42,7 +42,7 @@
   },
   {
     "type": "html",
-    "html": "<p>The hour-long drive to <em>Ixtlan del Rio</em>&nbsp;- a city of 29,000 - paid off. Jose was admitted into the local branch of the <em>Instituto Mexicano del Seguro Social - Bienestar, </em>commonly referred to as IMSS-Bienestar --&nbsp;the largest publicly funded healthcare system in Mexico. Despite being admitted, his health continued to decline. On January 9, 2021, Jose died.</p>\n<p>His wife, Augustina, cried behind her round metal glasses that framed her stout face. She quietly made her way to her husband of 50 years&#39; funeral. Guty, as the pueblo knew her, seemed to shift from her boisterous personality to a reserved mindset. Her positive COVID-19 test confirmed why her health began deteriorating - she was rushed to a private hospital 90 minutes away. The price for admission was too high, so the family quickly rushed her to the Tepic branch of IMSS, where she entered alone. </p>\n<p>On January 18, 2021, nine days after her husband died, she too passed away from COVID-19 complications, marking another devastating blow to the Jimenez-Delgado family.</p>\n<p>Their story represents the difficulty that low-income families in rural Mexico have when accessing reliable healthcare when they need it most. When the virus spread through the region&#39;s farming communities, transportation difficulties, high costs for supplies, and underinvestment in the few rural public hospitals resulted in mortality rates being highest among rural and low-income communities. Government reforms meant to address systemic inequalities failed. Six years after the onset of the pandemic, renewed pushes by Mexican lawmakers to invest in healthcare have the potential to fix the cracks in the system or repeat the errors of the past and leave communities behind.</p>\n<p>&nbsp;"
+    "html": "<p>His wife, Augustina, cried behind her round metal glasses that framed her stout face. She quietly made her way to her husband of 50 years&#39; funeral. Guty, as the pueblo knew her, seemed to shift from her boisterous personality to a reserved mindset. Her positive COVID-19 test confirmed why her health began deteriorating - she was rushed to a private hospital 90 minutes away. The price for admission was too high, so the family quickly rushed her to the Tepic branch of IMSS, where she entered alone. </p>\n<p>On January 18, 2021, nine days after her husband died, she too passed away from COVID-19 complications, marking another devastating blow to the Jimenez-Delgado family.</p>\n<p>Their story represents the difficulty that low-income families in rural Mexico have when accessing reliable healthcare when they need it most. When the virus spread through the region&#39;s farming communities, transportation difficulties, high costs for supplies, and underinvestment in the few rural public hospitals resulted in mortality rates being highest among rural and low-income communities. Government reforms meant to address systemic inequalities failed. Six years after the onset of the pandemic, renewed pushes by Mexican lawmakers to invest in healthcare have the potential to fix the cracks in the system or repeat the errors of the past and leave communities behind.</p>\n<p>&nbsp;"
   },
   {
     "type": "shortcode",
@@ -51,31 +51,28 @@
   },
   {
     "type": "html",
-    "html": "<h2>Finding help</h2>\n<p>Between 2020-2023, an estimated 800,000 people died from COVID-19 in Mexico, according to government data. The virus arrived in Mexico City and other major population centers before spreading across the country. The public health crisis exposed deep cracks in the country&#39;s healthcare system, especially for rural and indigenous communities.</p>\n<p>After taking office in December 2018, President Andres Manuel Lopez Obrador announced the Fourth Transformation, a sweeping set of social reforms that included an overhaul of the public healthcare sector. His administration canceled Seguro Popular &mdash; the existing coverage program &mdash; and replaced it with a new federal entity called INSABI. The intention was to weed out corruption and extend coverage to more Mexicans. The execution collapsed. INSABI&#39;s structure was unclear, creating confusion for many people who didn&#39;t know whether they were covered or where they could go to use it. The program was eventually replaced with IMSS-Bienestar, but the damage had already been done &mdash; and the virus arrived before the system could stabilize.</p>\n<p>Public systems like IMSS and IMSS-Bienestar make up the largest single source of healthcare for the 133 million people in Mexico. IMSS operates by having employers, the government, and individuals pay a dividend for services, with large centers concentrated in highly populated areas. IMSS-Bienestar is for those without sufficient income or insurance coverage - it is the most common system used by people in rural areas. IMSS-Bienestar facilities tend to be smaller and spread out across the country, reflecting the population it&#39;s meant to serve. Together, the systems serve around 80% of the Mexican population. </p>\n<p>Private healthcare systems, in comparison, make up a much smaller percentage, at about 1% of total patients in 2022. Those with the ability to pay out of pocket or with insurance that covers treatment receive what is often considered higher-quality care with more available resources per patient.</p>\n<p>University of California, San Francisco, researcher Lucia Abascal Miguel worked on a large team to evaluate the COVID-19 response in Mexico. She said the government&#39;s attempts to overhaul the public healthcare system failed to address rampant inequalities in Mexico, and the transition to a new system caused more harm than good. She said the virus hit with &quot;full force&quot; in a country that was in a vulnerable position as it changed how it provided healthcare services.</p>\n<p>Abascal Miguel said the team found a stark divide for those who sought medical attention at a public versus private location. She said IMSS reached 60% mortality for hospitalized patients, while private hospitals averaged around 20%.</p>"
+    "html": "<h2>Finding help</h2>\n<p>Between 2020-2023, an estimated 800,000 people died from COVID-19 in Mexico, according to government data. The virus arrived in Mexico City and other major population centers before spreading across the country. The public health crisis exposed deep cracks in the country&#39;s healthcare system, especially for rural and indigenous communities.</p>\n<p>After taking office in December 2018, President Andres Manuel Lopez Obrador announced the Fourth Transformation, a sweeping set of social reforms that included an overhaul of the public healthcare sector. His administration canceled Seguro Popular &mdash; the existing coverage program &mdash; and replaced it with a new federal entity called INSABI. The intention was to weed out corruption and extend coverage to more Mexicans. The execution collapsed. INSABI&#39;s structure was unclear, creating confusion for many people who didn&#39;t know whether they were covered or where they could go to use it. The program was eventually replaced with IMSS-Bienestar, but the damage had already been done &mdash; and the virus arrived before the system could stabilize.</p>\n<p>Public systems like IMSS and IMSS-Bienestar make up the largest single source of healthcare for the 133 million people in Mexico. IMSS operates by having employers, the government, and individuals pay a dividend for services, with large centers concentrated in highly populated areas. IMSS-Bienestar is for those without sufficient income or insurance coverage - it is the most common system used by people in rural areas. IMSS-Bienestar facilities tend to be smaller and spread out across the country, reflecting the population it&#39;s meant to serve. Together, the systems serve around 80% of the Mexican population. </p>"
   },
   {
     "type": "shortcode",
-    "name": "ImageEmbed",
+    "name": "ThreeTileCollage",
     "attrs": {
-      "src": "/images/covid_mortality_dot.svg",
-      "alt": "Jose y Augustina Jimenez-Delgado",
-      "caption": "Death rates at different medical centers.",
-      "size": "small"
+      "p": true,
+      "nbsp": true,
+      "images": "images/imsstepicfamily.jpg, images/imssixtl.jpg, images/private.jpg",
+      "alts": "",
+      "caption": "Hospitals across Mexico vary in the amount of funding they receive to provide care for communities. Public institutions are the most visited because of the dramatically lower cost than private centers. Credit: Andres Jimenez Larios",
+      "width": "40vw"
     }
   },
   {
     "type": "html",
-    "html": ""
+    "html": "<p>Private healthcare systems, in comparison, make up a much smaller percentage, at about 1% of total patients in 2022. Those with the ability to pay out of pocket or with insurance that covers treatment receive what is often considered higher-quality care with more available resources per patient.</p>\n<p>University of California, San Francisco, researcher Lucia Abascal Miguel worked on a team to evaluate the COVID-19 response in Mexico. She said the government&#39;s attempts to overhaul the public healthcare system failed to address rampant inequalities in Mexico, and the transition to a new system caused more harm than good. She said the virus hit with &quot;full force&quot; in a country that was in a vulnerable position as it changed how it provided healthcare services.</p>\n<p>Abascal Miguel said the team found a stark divide for those who sought medical attention at a public versus private location. She said IMSS reached 60% mortality for hospitalized patients, while private hospitals averaged around 20%.</p>"
   },
   {
     "type": "shortcode",
-    "name": "ImageEmbed",
-    "attrs": {
-      "src": "/images/private.jpg",
-      "alt": "Jose y Augustina Jimenez-Delgado",
-      "caption": "A private hospital in Tepic, Nayarit",
-      "size": "small"
-    }
+    "name": "CovidLethalityChart",
+    "attrs": {}
   },
   {
     "type": "html",
@@ -97,30 +94,7 @@
   },
   {
     "type": "html",
-    "html": ""
-  },
-  {
-    "type": "shortcode",
-    "name": "ScrollyMap",
-    "attrs": {}
-  },
-  {
-    "type": "html",
-    "html": "<h2>Distance and cost</h2>"
-  },
-  {
-    "type": "shortcode",
-    "name": "ImageEmbed",
-    "attrs": {
-      "src": "/images/map_mexico_nayarit_locator_20260427.png",
-      "alt": "Jose y Augustina Jimenez-Delgado",
-      "caption": "The geographic location of Nayarit in comparison to Mexico.",
-      "size": "medium"
-    }
-  },
-  {
-    "type": "html",
-    "html": "<p>Imelda described her parents as hard-working people from agricultural backgrounds who had to find ways to provide for their nine children. Jose worked in the region&#39;s volcanic soil growing sugar cane, while Guty ran a small shop from their home and sold ziploc bags of ice for 10 pesos - equivalent to less than a US dollar.</p>\n<p>Jose and Guty lived in Valle Verde, a town of no more than 400 people in the municipality of Ahuacatlan. The pueblo is equidistant from the cities of Ixtlan del Rio and Tepic, the state&#39;s capital and largest city.</p>"
+    "html": "<h2>Distance and cost</h2>\n<p>Imelda described her parents as hard-working people from agricultural backgrounds who had to find ways to provide for their nine children. Jose worked in the region&#39;s volcanic soil growing sugar cane, while Guty ran a small shop from their home and sold ziploc bags of ice for 10 pesos - equivalent to less than a US dollar.</p>\n<p>Jose and Guty lived in Valle Verde, a town of no more than 400 people in the municipality of Ahuacatlan. The pueblo is equidistant from the cities of Ixtlan del Rio and Tepic, the state&#39;s capital and largest city.</p>"
   },
   {
     "type": "shortcode",
@@ -131,12 +105,12 @@
       "images": "images/abuelotwins.jpeg, images/abuela1.jpeg, images/abuelokids.jpeg",
       "alts": "",
       "caption": "",
-      "width": "82vw"
+      "width": "50vw"
     }
   },
   {
     "type": "html",
-    "html": "<p>The family relied on public assistance programs to survive. IMSS-Bienestar was their only realistic option for care. Jose and Guty didn&#39;t have large pension plans, having worked informal jobs their entire lives &nbsp;like the others in their community. When Jose was fighting an aggressive form of prostate cancer, he had to rely on doctors from IMSS who had to find creative ways to find medication and keep him in remission. Remittances made up most of their disposable income, coming from their children who had long since moved away to major cities.</p>\n<p>Rural communities in Mexico make up about 20 percent of the total population, but an estimated 47% of rural residents live in poverty, 30 points higher than the rate in urban areas. Across Mexico, roughly 12% of the population are adults aged 60 and older, and about half are believed to live in poverty, with the percentage rising sharply in rural communities. Jose, at 82 and recovering from aggressive prostate cancer, sat at the intersection of nearly every risk factor researchers would later identify as predictive of the worst outcomes.</p>"
+    "html": "<p>The family relied on public assistance programs to survive. Jose and Guty didn&#39;t have large pension plans, having worked informal jobs their entire lives, like the others in their community. Government-sponsored care was their most realistic option for care. When Jose was fighting an aggressive form of prostate cancer, he had to rely on doctors from IMSS, who had to find creative ways to find medication and keep him in remission. Remittances made up most of their disposable income, coming from their children who had long since moved away to major cities.</p>\n<p>Rural communities in Mexico make up about 20 percent of the total population, but an estimated 47% of rural residents live in poverty, 30 points higher than the rate in urban areas. Across Mexico, roughly 12% of the population are adults aged 60 and older, and about half are believed to live in poverty, with the percentage rising sharply in rural communities. Jose, at 82 and recovering from aggressive prostate cancer, sat at the intersection of nearly every risk factor researchers would later identify as predictive of the worst outcomes.</p>"
   },
   {
     "type": "shortcode",
@@ -145,9 +119,9 @@
       "steps": [
         {
           "img": "/scrolly/ixtlan.jpg",
-          "alt": "Aerial view of the city at dusk",
+          "alt": "A picture of the ",
           "pos": "center",
-          "text": "Before their passing, Imelda recalled how she and her sister frantically searched for finger oxygen monitors and oxygen tanks. Supplies were either bought up already or so expensive that they were unable to afford them. A close family friend was able to lend items crucial for monitoring their father&#39;s health from home. "
+          "text": "Before her parents' death, Imelda recalled how she and her sister frantically searched for finger oxygen monitors and oxygen tanks. Supplies were either bought up already or so expensive that they were unable to afford them. A close family friend was able to lend items crucial for monitoring their father&#39;s health from home. "
         },
         {
           "img": "/scrolly/imss.jpg",
@@ -181,7 +155,21 @@
   },
   {
     "type": "html",
-    "html": "<h2>The price for air</h2>\n<p>Fatima Gonzalez Vargas and her family run a taxi and small shop in Tetitlan. When her husband came down with COVID, she had to become the primary source of income while also being a caretaker. Terrified that her diabetic mother would fall ill with no oxygen available, she tracked down a single tank through a nurse who knew of someone willing to sell one &mdash; at a cost of 14,000 pesos, roughly equivalent to several weeks of wages.</p>\n<p>&quot;I don&#39;t know if people were stealing them from hospitals and selling them,&quot; she said. &quot;What I knew is that one tank cost me 14,000 pesos.&quot;</p>\n<p>Abascal Miguel said the oxygen crisis was not unique to this region. It played out across rural Mexico as a symptom of a healthcare system that had never been adequately invested in.</p>\n<p>&quot;Oxygen became a huge problem in Mexico, it turned into a black market,&quot; said Abascal Miguel. &quot;People showed up at the hospital with their own oxygen tank because there was none there. In Mexico, the more marginalized a place was, the less medical access it had. The more rural, the more poor &mdash; the worse off you were, to put it plainly.&quot;</p>\n<p>Government&#39;s share of health spending rose from 45% in 2000 to a peak of ~54% in 2012&ndash;2013, then drifted back to 49% by 2023. Out-of-pocket costs &mdash; what families pay directly, like the Jimenez family paying for oxygen tanks &mdash; still represent 41% of all health spending, one of the highest rates in the for any country in the OECD, a index of countries and their performance on living metrics..</p>"
+    "html": "<h2>The price for air</h2>\n<p>Fatima Gonzalez Vargas and her family run a taxi and small shop in Tetitlan. When her husband came down with COVID, she had to become the primary source of income while also being a caretaker. Terrified that her diabetic mother would fall ill with no oxygen available, she tracked down a single tank through a nurse who knew of someone willing to sell one &mdash; at a cost of 14,000 pesos, roughly equivalent to several weeks of wages.</p>\n<p>&quot;I don&#39;t know if people were stealing them from hospitals and selling them,&quot; she said. &quot;What I knew is that one tank cost me 14,000 pesos.&quot;</p>"
+  },
+  {
+    "type": "shortcode",
+    "name": "ImageEmbed",
+    "attrs": {
+      "src": "/images/fatima.png",
+      "alt": "Jose y Augustina Jimenez-Delgado",
+      "caption": "Fatima Gonzalez Vargas in her shop, Nayarit.",
+      "size": "small"
+    }
+  },
+  {
+    "type": "html",
+    "html": "<p>Abascal Miguel said the oxygen crisis was not unique to this region. It played out across rural Mexico as a symptom of a healthcare system that had never been adequately invested in.</p>\n<p>&quot;Oxygen became a huge problem in Mexico, it turned into a black market,&quot; said Abascal Miguel. &quot;People showed up at the hospital with their own oxygen tank because there was none there. In Mexico, the more marginalized a place was, the less medical access it had. The more rural, the more poor &mdash; the worse off you were, to put it plainly.&quot;</p>\n<p>Government&#39;s share of health spending rose from 45% in 2000 to a peak of ~54% in 2012&ndash;2013, then drifted back to 49% by 2023. Out-of-pocket costs &mdash; what families pay directly, like the Jimenez family paying for oxygen tanks &mdash; still represent 41% of all health spending, one of the highest rates in the for any country in the OECD, a index of countries and their performance on living metrics..</p>"
   },
   {
     "type": "shortcode",
@@ -203,13 +191,8 @@
   },
   {
     "type": "shortcode",
-    "name": "ImageEmbed",
-    "attrs": {
-      "src": "/images/map_nayarit_roads_20260427.png",
-      "alt": "Jose y Augustina Jimenez-Delgado",
-      "caption": "The road network of Nayarit.",
-      "size": "small"
-    }
+    "name": "ScrollyMap",
+    "attrs": {}
   },
   {
     "type": "html",
@@ -236,16 +219,7 @@
   },
   {
     "type": "html",
-    "html": "<p>Rural municipalities still have a fraction of the hospital beds found in urban centers. Chronic diseases like diabetes, hypertension, and obesity, which greatly contributed to COVID&#39;s death toll, remain undertreated in low-income communities across Mexico. Health spending as a share of GDP has not meaningfully increased.</p>\n<p>The program designed specifically for those communities &mdash; IMSS-Bienestar, built for informal workers and rural residents who fall outside the formal employment system &mdash; remains on uncertain footing as the government rolls out its new universal health service. Whether communities like Valle Verde will be better served by what comes next, or simply reshuffled within the same unequal geography, remains an open question.</p>\n<p>&quot;In Mexico, where you are born determines your health,&quot; said Abascal Miguel. &quot;That is truly unacceptable.&quot;</p>\n<p>&nbsp;"
-  },
-  {
-    "type": "shortcode",
-    "name": "SectionBreak",
-    "attrs": {}
-  },
-  {
-    "type": "html",
-    "html": "<h2>Changes for a healthier future</h2>\n<p>Fatima still has the oxygen tank. It sits in a back room of the same grocery store her parents built, the same store she kept open through the worst months of the pandemic because closing it meant her family would not eat. She has not needed it and hopes she never will, but she has not gotten rid of it either.</p>\n<p>&quot;You say to yourself, I hope it never happens again,&quot; she said. &quot;But it stays with you.&quot;</p>\n<p>She is glad the height of the pandemic is over, but worried that any future crises will prove as disastrous or worse for her community. She and her husband continue to run their taxi business and small store, but knowing that is only possible because they had to continue working through lockdowns - something they fear to repeat.</p>\n<p>New IMSS facilities are being built across the state. A newly constructed hospital near San Vicente in Bahia de Banderas &mdash; a coastal municipality that draws tourists and seasonal workers from across Mexico &mdash; represents the kind of infrastructure investment advocates have demanded for years. But Bahia de Banderas is not Valle Verde. The communities of the Sierra Madre valleys are still an hour or more from the nearest hospital, and the roads that separate them from care are the same ones they have always had.</p>\n<p>In April 2026, President Claudia Sheinbaum signed a decree creating Mexico&#39;s Universal Health Service. The goal, she said, was unambiguous: by the end of her administration, any Mexican would be able to walk into any public health institution and receive care, regardless of which program they were enrolled in. A national health credential &mdash; physical and digital &mdash; would tie together IMSS, ISSSTE, and IMSS-Bienestar into a single portable system. Cross-institutional care would begin in phases starting January 2027. Supporters called it a historic step. Critics noted that Mexico had heard similar promises before.</p>"
+    "html": ""
   },
   {
     "type": "shortcode",
@@ -259,20 +233,15 @@
   },
   {
     "type": "html",
-    "html": "<p>The conditions that made Valle Verde so vulnerable in the winter of 2020 are not unique to rural Mexico. Across the United States, rural communities face the same compound disadvantages: fewer hospitals, longer distances to care, higher rates of chronic disease, and populations living paycheck to paycheck with no margin for a medical crisis. When those vulnerabilities stack &mdash; poverty on top of age on top of illness on top of distance &mdash; the consequences follow a predictable pattern, regardless of which side of the border they play out on.</p>\n<p>Abascal Miguel, who has studied health systems across Latin America and the United States, said the lesson of Mexico&#39;s COVID response is not only Mexico&#39;s to learn.</p>\n<p>&quot;The inequalities in health follow the inequalities in everything else,&quot; she said. &quot;Someone with economic vulnerability will have a health vulnerability &mdash; because of the type of care they can or can&#39;t access, the kind of work they do, whether they can afford to stop working when they are sick. That is not a Mexican problem. That is a human problem.&quot;</p>"
+    "html": "<p>Rural municipalities still have a fraction of the hospital beds found in urban centers. Chronic diseases like diabetes, hypertension, and obesity, which greatly contributed to COVID&#39;s death toll, remain undertreated in low-income communities across Mexico. Health spending as a share of GDP has not meaningfully increased.</p>\n<p>The program designed specifically for those communities &mdash; IMSS-Bienestar, built for informal workers and rural residents who fall outside the formal employment system &mdash; remains on uncertain footing as the government rolls out its new universal health service. Whether communities like Valle Verde will be better served by what comes next, or simply reshuffled within the same unequal geography, remains an open question.</p>\n<p>&quot;In Mexico, where you are born determines your health,&quot; said Abascal Miguel. &quot;That is truly unacceptable.&quot;</p>\n<p>&nbsp;"
   },
   {
     "type": "shortcode",
-    "name": "ImageEmbed",
-    "attrs": {
-      "src": "/images/fatima.png",
-      "alt": "Jose y Augustina Jimenez-Delgado",
-      "caption": "Fatima Gonzalez Vargas in her shop, Nayarit.",
-      "size": "small"
-    }
+    "name": "SectionBreak",
+    "attrs": {}
   },
   {
     "type": "html",
-    "html": "<p>Jose and Augustina are buried in Valle Verde, having been moved from an unmarked grave. Seven children, dozens of grandchildren, and a community of neighbors who knew them their whole lives continue to reckon with what their deaths meant &mdash; and whether, when the next crisis comes, anything will be different.</p>"
+    "html": "<h2>Changes for a healthier future</h2>\n<p>Fatima still has the oxygen tank. It sits in a back room of the same grocery store her parents built, the same store she kept open through the worst months of the pandemic because closing it meant her family would not eat. She has not needed it and hopes she never will, but she has not gotten rid of it either.</p>\n<p>&quot;You say to yourself, I hope it never happens again,&quot; she said. &quot;But it stays with you.&quot;</p>\n<p>She is glad the height of the pandemic is over, but worried that any future crises will prove as disastrous or worse for her community. She and her husband continue to run their taxi business and small store, but knowing that is only possible because they had to continue working through lockdowns - something they fear to repeat.</p>\n<p>New IMSS facilities are being built across the state. A newly constructed hospital near San Vicente in Bahia de Banderas &mdash; a coastal municipality that draws tourists and seasonal workers from across Mexico &mdash; represents the kind of infrastructure investment advocates have demanded for years. But Bahia de Banderas is not Valle Verde. The communities of the Sierra Madre valleys are still an hour or more from the nearest hospital, and the roads that separate them from care are the same ones they have always had.</p>\n<p>In April 2026, President Claudia Sheinbaum signed a decree creating Mexico&#39;s Universal Health Service. The goal, she said, was unambiguous: by the end of her administration, any Mexican would be able to walk into any public health institution and receive care, regardless of which program they were enrolled in. A national health credential &mdash; physical and digital &mdash; would tie together IMSS, ISSSTE, and IMSS-Bienestar into a single portable system. Cross-institutional care would begin in phases starting January 2027. Supporters called it a historic step. Critics noted that Mexico had heard similar promises before.</p>\n<p>The conditions that made Valle Verde so vulnerable in the winter of 2020 are not unique to rural Mexico. Across the United States, rural communities face the same compound disadvantages: fewer hospitals, longer distances to care, higher rates of chronic disease, and populations living paycheck to paycheck with no margin for a medical crisis. When those vulnerabilities stack &mdash; poverty on top of age on top of illness on top of distance &mdash; the consequences follow a predictable pattern, regardless of which side of the border they play out on.</p>\n<p>Abascal Miguel, who has studied health systems across Latin America and the United States, said the lesson of Mexico&#39;s COVID response is not only Mexico&#39;s to learn.</p>\n<p>&quot;The inequalities in health follow the inequalities in everything else,&quot; she said. &quot;Someone with economic vulnerability will have a health vulnerability &mdash; because of the type of care they can or can&#39;t access, the kind of work they do, whether they can afford to stop working when they are sick. That is not a Mexican problem. That is a human problem.&quot;</p>\n<p>Jose and Augustina are buried in Valle Verde, having been moved from an unmarked grave. Seven children, dozens of grandchildren, and a community of neighbors who knew them their whole lives continue to reckon with what their deaths meant &mdash; and whether, when the next crisis comes, anything will be different.</p>"
   }
 ]
