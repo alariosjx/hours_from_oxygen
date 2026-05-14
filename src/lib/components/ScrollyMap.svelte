@@ -7,7 +7,6 @@
 	import { browser } from '$app/environment';
 	import { base } from '$app/paths';
 
-	// ── Types ──────────────────────────────────────────────────────────────
 	interface Facility {
 		clues: string;
 		name: string;
@@ -23,7 +22,15 @@
 		estrato: string;
 	}
 
-	type StepId = 'all' | 'clinics' | 'drain' | 'hospitals' | 'bienestar' | 'explore';
+	type StepId =
+		| 'all'
+		| 'clinics'
+		| 'drain'
+		| 'hospitals'
+		| 'bienestar'
+		| 'bienestar_hospitals_only'
+		| 'bienestar_hospitals'
+		| 'explore';
 
 	interface MapStep {
 		id: StepId;
@@ -34,26 +41,21 @@
 		stats?: { n: string; label: string }[];
 	}
 
-	// ── Steps ──────────────────────────────────────────────────────────────
+	// ── Steps ─────────────────────────────────────────────────────────────────
 	const STEPS: MapStep[] = [
 		{
 			id: 'all',
 			headline: "Nayarit's Public Health System",
-			body: 'When COVID-19 arrived in rural Nayarit in 2020, it entered a healthcare system already stretched thin. More than 600 active public medical facilities were spread across mountains, valleys, and coast — but access was never equal. These are all the public and private healthcare facilities operating in Nayarit during the pandemic.',
+			body: 'When COVID-19 arrived in rural Nayarit in 2020, it entered a healthcare system already stretched thin. More than 600 active medical facilities were spread across mountains, valleys, and coast — but access was never equal.',
 			source: 'CLUES — Catálogo de Unidades de Salud, Secretaría de Salud, 2024',
 			sourceUrl:
 				'https://www.gob.mx/salud/documentos/datos-abiertos-de-establecimientos-de-salud-clues',
-			stats: [
-				{ n: '633', label: 'Active facilities' },
-				{ n: '116', label: 'IMSS clinics' },
-				{ n: '271', label: 'IMSS-Bienestar' },
-				{ n: '7', label: 'IMSS hospitals' }
-			]
+			stats: [{ n: '633', label: 'Total active facilities' }]
 		},
 		{
 			id: 'clinics',
 			headline: 'First-Level Clinics: The First Line of Defense',
-			body: 'The bulk of rural healthcare runs through 116 IMSS family medicine units (UMFs) — the first point of contact for most low-income Nayaritas. In Ahuacatlán, the UMF 17 served communities like Valle Verde and Tetitlán. But these clinics were never designed to handle a respiratory pandemic requiring oxygen, ICU beds, or specialist care.',
+			body: 'The bulk of rural healthcare runs through 116 IMSS family medicine units — the first point of contact for most low-income Nayaritas. In Ahuacatlán, UMF 17 served communities like Valle Verde and Tetitlán. These clinics were not built to handle a respiratory pandemic requiring oxygen or intensive care.',
 			source: 'IMSS Directorio de Clínicas, Nayarit, 2020–2021',
 			sourceUrl:
 				'https://www.imss.gob.mx/directorio?dom_estado=Nayarit&tipo_de_servicio=Cl%C3%ADnica',
@@ -65,61 +67,72 @@
 		{
 			id: 'drain',
 			headline: 'The Doctor Drain',
-			body: "As COVID overwhelmed urban hospitals, the government reassigned rural doctors to support responses in Tepic, Ixtlán del Río, and other cities. Family doctor Ernesto Bueno Cortez left Valle Verde to staff the IMSS branch in Ixtlán. The villages he left behind had to manage alone — or drive an hour for care that wasn't guaranteed to be available.",
-			source: 'Interview: Dr. Ernesto Bueno Cortez, Valle Verde, 2024',
-			stats: [
-				{ n: '7', label: 'IMSS hospitals absorbing COVID patients' },
-				{ n: '60%', label: 'IMSS COVID hospitalization mortality' }
-			]
+			body: "As COVID overwhelmed hospitals in Tepic and Ixtlán del Río, the government reassigned rural doctors to staff them. The villages they left behind had to manage alone — or make the long drive for care that wasn't guaranteed to be available.",
+			source: 'CLUES / IMSS Directorio, Nayarit, 2020–2023',
+			stats: [{ n: '7', label: 'IMSS hospitals absorbing COVID patients' }]
 		},
 		{
 			id: 'hospitals',
 			headline: 'Only 7 IMSS Hospitals for 1.2 Million People',
-			body: "When Jose Jimenez's oxygen dropped, his family drove an hour to reach an IMSS hospital bed. That's because Nayarit had just 7 active IMSS general hospitals — in Tepic, Acaponeta, Tuxpan, Santiago Ixcuintla, Las Varas, and Bahía de Banderas. Rural areas had 1.4 hospital beds per 100,000 people, compared to 80.4 in urban centers.",
-			source: 'CLUES / Research: Abascal Miguel et al., UCSF, 2023',
+			body: "When Jose Jimenez's oxygen dropped, his family drove to the IMSS-Bienestar hospital in Ahuacatlán. When his wife Augustina fell ill days later, she was driven further — north to the IMSS general hospital in Tepic. Nayarit had just 7 active IMSS general hospitals, all concentrated far from rural communities.",
+			source: 'CLUES / IMSS Directorio, Nayarit, 2020–2023',
+			sourceUrl: 'https://www.imss.gob.mx/directorio?dom_estado=Nayarit&tipo_de_servicio=Hospital',
 			stats: [
-				{ n: '1.4', label: 'Beds per 100K — rural' },
-				{ n: '80.4', label: 'Beds per 100K — urban' },
-				{ n: '3×', label: 'Lower mortality at private hospitals' }
+				{ n: '7', label: 'IMSS general hospitals' },
+				{ n: '1.2M', label: 'State population' }
 			]
 		},
 		{
 			id: 'bienestar',
-			headline: 'IMSS-Bienestar: Present but Inconsistent',
-			body: "IMSS-Bienestar — the program for informal workers and rural residents — operated 257 clinics and 14 small hospitals across Nayarit's most remote communities. Valle Verde itself was served by one. But the 2019–2020 INSABI transition left facilities without clear funding. Families like the Jimenez-Delgados technically had coverage, but the system couldn't reliably deliver.",
-			source: 'IMSS-Bienestar Directorio / ANEXO 1, 231 units officially transferred, 2023',
+			headline: 'IMSS-Bienestar: Widespread but Underpowered',
+			body: "IMSS-Bienestar — designed for informal workers and rural residents — operated 257 clinics and 14 small hospitals across Nayarit's most remote communities. Valle Verde was served by one. But most of these facilities were outpatient only. When the pandemic required oxygen or intensive care, they couldn't deliver.",
+			source: 'IMSS-Bienestar Directorio / ANEXO 1, 2023',
 			sourceUrl:
 				'https://www.imss.gob.mx/directorio?dom_estado=Nayarit&tipo_de_servicio=IMSS%20Bienestar',
 			stats: [
 				{ n: '257', label: 'IMSS-Bienestar clinics' },
-				{ n: '14', label: 'IMSS-Bienestar hospitals' },
-				{ n: '2019', label: 'Year INSABI replaced Seguro Popular' }
+				{ n: '14', label: 'IMSS-Bienestar hospitals' }
+			]
+		},
+		{
+			id: 'bienestar_hospitals_only',
+			headline: 'The 14 IMSS-Bienestar Hospitals',
+			body: 'IMSS-Bienestar operated 14 small hospitals — more than double the IMSS count — but scattered across a vast state. They provided some intermediate care, but most lacked the oxygen reserves, ICU beds, and specialist staff that COVID patients needed.',
+			source: 'IMSS-Bienestar Directorio / ANEXO 1, 2023',
+			stats: [{ n: '14', label: 'IMSS-Bienestar hospitals' }]
+		},
+		{
+			id: 'bienestar_hospitals',
+			headline: "When Clinics Weren't Enough",
+			body: 'Together, just 21 hospital-level facilities served the entire state — 7 IMSS general and 14 IMSS-Bienestar. Families who needed hospital care had to travel, often far, hoping a bed would be available. The geography of hospitals is the geography of inequality.',
+			source: 'CLUES + IMSS Directorio + IMSS-Bienestar Directorio, 2024',
+			stats: [
+				{ n: '7', label: 'IMSS hospitals' },
+				{ n: '14', label: 'Bienestar hospitals' },
+				{ n: '21', label: 'Total hospitals' }
 			]
 		},
 		{
 			id: 'explore',
-			headline: 'Explore the Full Map',
-			body: 'Filter the facilities below by institution type. The geography of healthcare in Nayarit reflects the geography of inequality — hospitals and well-staffed clinics cluster near Tepic and the coast, while the Sierra Madre valleys where Valle Verde sits remain the most medically isolated regions in the state.',
+			headline: 'Explore the Map',
+			body: 'Filter by institution type. Hospitals cluster near Tepic and the coast. The Sierra Madre valleys — where Valle Verde sits — are the most medically isolated regions in the state.',
 			source: 'CLUES + IMSS Directorio + IMSS-Bienestar Directorio, 2024',
 			sourceUrl: 'https://www.imss.gob.mx/directorio?dom_estado=Nayarit'
 		}
 	];
 
-	// ── Visual config ──────────────────────────────────────────────────────
-	const W = 900,
-		H = 620; // SVG canvas size
-
+	// ── Colors ────────────────────────────────────────────────────────────────
 	const COLORS: Record<string, string> = {
-		imss_clinic: '#c8960a',
-		imss_hospital: '#e04040',
-		imss_bienestar: '#9b6fcc',
-		imss_bienestar_hospital: '#c89fe8',
-		ssa: '#4a9b7f',
-		issste: '#4a7fb5',
-		private: '#555',
-		private_hospital: '#777',
-		other: '#444',
-		other_hospital: '#666'
+		imss_clinic: '#FBBF24', // amber triangle
+		imss_hospital: '#F87171', // coral red cross
+		imss_bienestar: '#A78BFA', // lavender diamond
+		imss_bienestar_hospital: '#C4B5FD', // light lavender cross
+		ssa: '#34D399', // emerald square
+		issste: '#60A5FA', // sky blue square
+		private: '#6B7280', // gray circle
+		private_hospital: '#9CA3AF', // light gray cross
+		other: '#4B5563',
+		other_hospital: '#6B7280'
 	};
 
 	const LABELS: Record<string, string> = {
@@ -131,107 +144,129 @@
 		issste: 'ISSSTE',
 		private: 'Private Clinic',
 		private_hospital: 'Private Hospital',
-		other: 'Other',
+		other: 'Other Clinic',
 		other_hospital: 'Other Hospital'
 	};
 
-	function dotRadius(cat: string): number {
-		return cat.includes('hospital') ? 6 : 3;
-	}
+	// Shape types per category
+	type Shape = 'triangle' | 'cross' | 'diamond' | 'square' | 'circle';
+	const SHAPES: Record<string, Shape> = {
+		imss_clinic: 'triangle',
+		imss_hospital: 'cross',
+		imss_bienestar: 'diamond',
+		imss_bienestar_hospital: 'cross',
+		ssa: 'square',
+		issste: 'square',
+		private: 'circle',
+		private_hospital: 'cross',
+		other: 'circle',
+		other_hospital: 'cross'
+	};
 
-	function getDotOpacity(cat: string, stepId: StepId): number {
-		if (stepId === 'all') return 0.85;
-		if (stepId === 'clinics') return cat === 'imss_clinic' ? 0.9 : 0.06;
-		if (stepId === 'drain')
-			return cat === 'imss_hospital' ? 0.95 : cat === 'imss_clinic' ? 0.12 : 0.04;
-		if (stepId === 'hospitals') return cat === 'imss_hospital' ? 0.95 : 0.06;
-		if (stepId === 'bienestar')
-			return cat === 'imss_bienestar' || cat === 'imss_bienestar_hospital' ? 0.9 : 0.06;
-		if (stepId === 'explore') return filterState[cat] ? 0.85 : 0;
-		return 0.06;
-	}
-
-	// ── State ──────────────────────────────────────────────────────────────
-	let facilities: Facility[] = [];
-	let boundaryGeoJSON: any = null; // raw GeoJSON, passed to D3
-	let isLoading = true;
-	let mapReady = false; // true once D3 has drawn the SVG
-
-	// D3-projected data (populated after load)
-	let boundaryPaths: string[] = [];
-	let projectedFacilities: (Facility & { x: number; y: number })[] = [];
-	let roadPaths: { d: string; toll: boolean; label: string }[] = [];
-	let cityPoints: { name: string; x: number; y: number; capital: boolean }[] = [];
-	let valleVerde: [number, number] = [0, 0];
-
-	// Road waypoints [lat, lng]
-	const ROAD_WAYPOINTS = [
-		{
-			label: 'MEX-15 (Free highway)',
-			toll: false,
-			pts: [
-				[23.02, -105.68],
-				[22.85, -105.62],
-				[22.55, -105.55],
-				[22.25, -105.45],
-				[21.98, -105.38],
-				[21.75, -105.28],
-				[21.54, -105.28],
-				[21.4, -105.18],
-				[21.2, -105.05],
-				[21.0, -104.98],
-				[20.8, -104.85]
-			] as [number, number][]
-		},
-		{
-			label: 'MEX-15D (Toll — cuota)',
-			toll: true,
-			pts: [
-				[22.78, -105.5],
-				[22.5, -105.4],
-				[22.18, -105.32],
-				[21.88, -105.18],
-				[21.58, -105.08],
-				[21.35, -104.95],
-				[21.15, -104.9],
-				[20.92, -104.82]
-			] as [number, number][]
-		},
-		{
-			label: 'MEX-68 (Tepic–Durango)',
-			toll: false,
-			pts: [
-				[21.5, -104.89],
-				[21.55, -104.6],
-				[21.6, -104.35],
-				[21.65, -104.18],
-				[21.72, -104.02]
-			] as [number, number][]
-		},
-		{
-			label: 'MEX-161 (Tepic–Acaponeta)',
-			toll: false,
-			pts: [
-				[21.5, -104.89],
-				[21.72, -104.9],
-				[21.92, -104.92],
-				[22.12, -104.95],
-				[22.32, -105.08],
-				[22.52, -105.2]
-			] as [number, number][]
-		},
-		{
-			label: 'MEX-200 (Coastal road)',
-			toll: false,
-			pts: [
-				[20.8, -105.38],
-				[21.0, -105.45],
-				[21.2, -105.48],
-				[21.4, -105.52],
-				[21.54, -105.58]
-			] as [number, number][]
+	// Returns an SVG path `d` attribute centered at (0,0) for each shape
+	function shapePath(shape: Shape, isHospital: boolean): string {
+		const s = isHospital ? 7 : 4.5;
+		switch (shape) {
+			case 'triangle': {
+				// Upward-pointing triangle
+				const h = s * 1.73;
+				return `M 0,${-h * 0.67} L ${s},${h * 0.33} L ${-s},${h * 0.33} Z`;
+			}
+			case 'cross': {
+				// Plus/cross — large for hospitals
+				const t = isHospital ? 2.8 : 2;
+				return `M ${-t},${-s} L ${t},${-s} L ${t},${-t} L ${s},${-t} L ${s},${t} L ${t},${t} L ${t},${s} L ${-t},${s} L ${-t},${t} L ${-s},${t} L ${-s},${-t} L ${-t},${-t} Z`;
+			}
+			case 'diamond': {
+				return `M 0,${-s} L ${s},0 L 0,${s} L ${-s},0 Z`;
+			}
+			case 'square': {
+				const h = s * 0.88;
+				return `M ${-h},${-h} L ${h},${-h} L ${h},${h} L ${-h},${h} Z`;
+			}
+			case 'circle':
+			default: {
+				// Approximate circle with a polygon for SVG path
+				const pts = 12;
+				const arr = [];
+				for (let i = 0; i < pts; i++) {
+					const a = (i / pts) * Math.PI * 2 - Math.PI / 2;
+					arr.push(
+						`${i === 0 ? 'M' : 'L'} ${(s * Math.cos(a)).toFixed(2)},${(s * Math.sin(a)).toFixed(2)}`
+					);
+				}
+				return arr.join(' ') + ' Z';
+			}
 		}
+	}
+
+	// Opacity by step
+	function opacity(cat: string, id: StepId): number {
+		if (id === 'all') return 0.88;
+		if (id === 'clinics') return cat === 'imss_clinic' ? 0.95 : 0.05;
+		if (id === 'drain') return cat === 'imss_hospital' ? 0.95 : cat === 'imss_clinic' ? 0.1 : 0.04;
+		if (id === 'hospitals') return cat === 'imss_hospital' ? 0.95 : 0.05;
+		if (id === 'bienestar')
+			return cat === 'imss_bienestar' || cat === 'imss_bienestar_hospital' ? 0.92 : 0.05;
+		if (id === 'bienestar_hospitals_only') return cat === 'imss_bienestar_hospital' ? 0.95 : 0.05;
+		if (id === 'bienestar_hospitals') {
+			if (cat === 'imss_hospital' || cat === 'imss_bienestar_hospital') return 0.95;
+			if (cat === 'imss_bienestar') return 0.1;
+			return 0.04;
+		}
+		if (id === 'explore') return filterState[cat] !== false ? 0.88 : 0;
+		return 0.05;
+	}
+
+	function legendFor(id: StepId): string[] {
+		if (id === 'all')
+			return [
+				'imss_clinic',
+				'imss_hospital',
+				'imss_bienestar',
+				'imss_bienestar_hospital',
+				'ssa',
+				'private_hospital'
+			];
+		if (id === 'clinics') return ['imss_clinic'];
+		if (id === 'drain') return ['imss_hospital', 'imss_clinic'];
+		if (id === 'hospitals') return ['imss_hospital'];
+		if (id === 'bienestar') return ['imss_bienestar', 'imss_bienestar_hospital'];
+		if (id === 'bienestar_hospitals_only') return ['imss_bienestar_hospital'];
+		if (id === 'bienestar_hospitals') return ['imss_hospital', 'imss_bienestar_hospital'];
+		if (id === 'explore')
+			return [
+				'imss_clinic',
+				'imss_hospital',
+				'imss_bienestar',
+				'imss_bienestar_hospital',
+				'ssa',
+				'private',
+				'private_hospital'
+			];
+		return [];
+	}
+
+	// Facility count breakdown for step 1 table
+	const TABLE_ROWS = [
+		{ cat: 'imss_clinic', label: 'IMSS Clinic (UMF)' },
+		{ cat: 'imss_hospital', label: 'IMSS Hospital' },
+		{ cat: 'imss_bienestar', label: 'IMSS-Bienestar Clinic' },
+		{ cat: 'imss_bienestar_hospital', label: 'IMSS-Bienestar Hospital' },
+		{ cat: 'ssa', label: 'State Health (SSA)' },
+		{ cat: 'private', label: 'Private Clinic' },
+		{ cat: 'private_hospital', label: 'Private Hospital' },
+		{ cat: 'other', label: 'Other' }
 	];
+
+	// ── State ─────────────────────────────────────────────────────────────────
+	let facilities: Facility[] = [];
+	let isLoading = true;
+	let mapReady = false;
+	let boundaryPaths: string[] = [];
+	let projectedFacs: (Facility & { x: number; y: number })[] = [];
+	let cityPts: { name: string; x: number; y: number; capital: boolean }[] = [];
+	let valleVerde: [number, number] = [0, 0];
 
 	const CITY_DEFS = [
 		{ name: 'Tepic', lat: 21.5, lng: -104.89, capital: true },
@@ -241,16 +276,12 @@
 		{ name: 'Santiago Ixcuintla', lat: 21.81, lng: -105.22, capital: false }
 	];
 
-	// ── Scroll state ───────────────────────────────────────────────────────
-	let bgIndex = 0;
-	let released = false,
-		prevCarryOut = false,
-		carryOut = false;
-	let rafPending = false,
-		nearViewport = false;
-	let sectionEl: HTMLElement | null = null;
-	let textBoxEls: (HTMLElement | null)[] = new Array(STEPS.length).fill(null);
-	let tooltip: { x: number; y: number; f: Facility } | null = null;
+	const W = 900,
+		H = 620;
+
+	let stepIdx = 0;
+	$: activeStep = STEPS[stepIdx] ?? STEPS[0];
+	$: activeLegend = legendFor(activeStep.id);
 
 	let filterState: Record<string, boolean> = {
 		imss_clinic: true,
@@ -265,392 +296,308 @@
 		other_hospital: false
 	};
 
-	const CARRY_POINT = 0.5;
+	let tooltip: { x: number; y: number; f: Facility } | null = null;
+	let sectionEl: HTMLElement | null = null;
+	let stepEls: (HTMLElement | null)[] = [];
+	let released = false,
+		prevCarryOut = false,
+		rafPending = false,
+		nearViewport = false;
+	let observer: IntersectionObserver | null = null;
 
-	function computePassedIndex(): number {
-		let passed = -1;
-		const lastIdx = textBoxEls.length - 1;
-		const carryY = window.innerHeight * CARRY_POINT;
-		for (let i = 0; i < textBoxEls.length; i++) {
-			const el = textBoxEls[i];
-			if (!el) continue;
-			const top = el.getBoundingClientRect().top;
-			if (top <= (i === lastIdx ? carryY : 1)) passed = i;
-			else break;
-		}
-		return passed;
-	}
+	const TRIGGER = 0.4;
+	const CARRY = 0.15; // release only when last step nearly scrolled off top
 
-	function updateCarryOut() {
-		const el = textBoxEls[STEPS.length - 1];
-		if (!el) {
-			carryOut = released = false;
-			prevCarryOut = false;
-			return;
-		}
-		carryOut = el.getBoundingClientRect().top <= window.innerHeight * CARRY_POINT;
-		if (carryOut && !prevCarryOut) released = true;
-		if (!carryOut && prevCarryOut) released = false;
-		prevCarryOut = carryOut;
-	}
-
-	function updateFromScroll() {
-		rafPending = false;
-		bgIndex = Math.min(STEPS.length - 1, Math.max(0, computePassedIndex() + 1));
-		updateCarryOut();
-	}
-
-	function onScrollOrResize() {
+	function onScroll() {
 		if (!browser || rafPending) return;
 		rafPending = true;
-		requestAnimationFrame(updateFromScroll);
+		requestAnimationFrame(() => {
+			rafPending = false;
+			if (!stepEls.length) return;
+			const vh = window.innerHeight;
+			let found = 0;
+			for (let i = 0; i < stepEls.length; i++) {
+				const el = stepEls[i];
+				if (!el) continue;
+				if (el.getBoundingClientRect().top <= vh * TRIGGER) found = i;
+			}
+			stepIdx = found;
+			const lastEl = stepEls[stepEls.length - 1];
+			if (lastEl) {
+				const nowCarry = lastEl.getBoundingClientRect().top <= vh * CARRY;
+				if (nowCarry && !prevCarryOut) released = true;
+				if (!nowCarry && prevCarryOut) released = false;
+				prevCarryOut = nowCarry;
+			}
+		});
 	}
 
-	// ── D3 projection setup ───────────────────────────────────────────────
-	// Called once data is loaded. Uses d3.geoMercator().fitSize() so the
-	// boundary GeoJSON defines the projection — dots use the SAME projector.
-	async function setupProjection(d3: any, geo: any) {
-		// Build a combined FeatureCollection for fitSize — use all municipality polygons
-		const projector = d3.geoMercator().fitSize([W, H], geo);
+	function loadD3(): Promise<void> {
+		if ((window as any).d3) return Promise.resolve();
+		return new Promise((res, rej) => {
+			const s = document.createElement('script');
+			s.src = 'https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js';
+			s.onload = () => res();
+			s.onerror = rej;
+			document.head.appendChild(s);
+		});
+	}
 
-		const pathGen = d3.geoPath().projection(projector);
-
-		// Boundary paths — one per feature, guarded so one bad polygon never kills the map
-		if (geo.type === 'FeatureCollection') {
-			boundaryPaths = geo.features
-				.map((f: any) => {
-					try {
-						return pathGen(f);
-					} catch {
-						return '';
+	async function buildProjection(d3: any, geo: any) {
+		// Collect extents via loop — spread of 4000+ items blows the JS stack
+		let minLng = Infinity,
+			maxLng = -Infinity,
+			minLat = Infinity,
+			maxLat = -Infinity;
+		const features = geo.type === 'FeatureCollection' ? geo.features : [geo];
+		for (const f of features) {
+			const geom = f.geometry;
+			const polys = geom.type === 'Polygon' ? [geom.coordinates] : geom.coordinates;
+			for (const poly of polys)
+				for (const ring of poly)
+					for (const pt of ring) {
+						if (pt[0] < minLng) minLng = pt[0];
+						if (pt[0] > maxLng) maxLng = pt[0];
+						if (pt[1] < minLat) minLat = pt[1];
+						if (pt[1] > maxLat) maxLat = pt[1];
 					}
-				})
-				.filter(Boolean);
-		} else {
-			try {
-				boundaryPaths = [pathGen(geo)].filter(Boolean);
-			} catch {
-				boundaryPaths = [];
-			}
 		}
+		const cLng = (minLng + maxLng) / 2,
+			cLat = (minLat + maxLat) / 2;
 
-		// Project facilities using the SAME projector
-		projectedFacilities = facilities.map((f) => {
-			const [x, y] = projector([f.lng, f.lat]) ?? [0, 0];
-			return { ...f, x: Math.round(x * 10) / 10, y: Math.round(y * 10) / 10 };
+		// Compute scale from reference projection (avoids fitSize crash on tiny polygons)
+		const REF = 150;
+		const refProj = d3
+			.geoMercator()
+			.center([cLng, cLat])
+			.scale(REF)
+			.translate([W / 2, H / 2]);
+		const [x0] = refProj([minLng, cLat]) ?? [0];
+		const [x1] = refProj([maxLng, cLat]) ?? [0];
+		const [, y0] = refProj([cLng, minLat]) ?? [0, 0];
+		const [, y1] = refProj([cLng, maxLat]) ?? [0, 0];
+		const scale = REF * 0.88 * Math.min(W / Math.abs(x1 - x0), H / Math.abs(y1 - y0));
+
+		const proj = d3
+			.geoMercator()
+			.center([cLng, cLat])
+			.scale(scale)
+			.translate([W / 2, H / 2]);
+		const path = d3.geoPath().projection(proj);
+
+		boundaryPaths = features
+			.map((f: any) => {
+				try {
+					return path(f) ?? '';
+				} catch {
+					return '';
+				}
+			})
+			.filter(Boolean);
+
+		projectedFacs = facilities.map((f) => {
+			const [x, y] = proj([f.lng, f.lat]) ?? [0, 0];
+			return { ...f, x: +x.toFixed(1), y: +y.toFixed(1) };
 		});
 
-		// Project road waypoints
-		roadPaths = ROAD_WAYPOINTS.map((road) => {
-			const d =
-				'M ' +
-				road.pts
-					.map(([lat, lng]) => {
-						const [x, y] = projector([lng, lat]) ?? [0, 0];
-						return `${Math.round(x)},${Math.round(y)}`;
-					})
-					.join(' L ');
-			return { d, toll: road.toll, label: road.label };
-		});
-
-		// Project cities
-		cityPoints = CITY_DEFS.map((c) => {
-			const [x, y] = projector([c.lng, c.lat]) ?? [0, 0];
+		cityPts = CITY_DEFS.map((c) => {
+			const [x, y] = proj([c.lng, c.lat]) ?? [0, 0];
 			return { name: c.name, x: Math.round(x), y: Math.round(y), capital: c.capital };
 		});
 
-		// Project Valle Verde
-		const [vx, vy] = projector([-104.485, 21.054]) ?? [0, 0];
+		const [vx, vy] = proj([-104.485, 21.054]) ?? [0, 0];
 		valleVerde = [Math.round(vx), Math.round(vy)];
 
 		mapReady = true;
 	}
 
-	// ── Lifecycle ──────────────────────────────────────────────────────────
-	let d3Loaded = false;
-	let observer: IntersectionObserver | null = null;
-
 	onMount(async () => {
 		if (!browser) return;
-		window.addEventListener('scroll', onScrollOrResize, { passive: true });
-		window.addEventListener('resize', onScrollOrResize);
+		window.addEventListener('scroll', onScroll, { passive: true });
+		window.addEventListener('resize', onScroll, { passive: true });
 
 		observer = new IntersectionObserver(
-			async (entries) => {
-				if (!entries[0].isIntersecting) return;
+			async ([entry]) => {
+				if (!entry.isIntersecting) return;
 				observer?.disconnect();
 				observer = null;
 				nearViewport = true;
-
 				try {
-					// Load D3, data, and GeoJSON in parallel
 					const [, facRes, geoRes] = await Promise.all([
 						loadD3(),
 						fetch(`${base}/data/nayarit_medical_centers.json`),
 						fetch(`${base}/data/nayarit_municipalities.geojson`)
 					]);
-
 					facilities = await facRes.json();
 					const geo = await geoRes.json();
-					boundaryGeoJSON = geo;
-
-					const d3 = (window as any).d3;
-					await setupProjection(d3, geo);
+					await buildProjection((window as any).d3, geo);
 				} catch (e) {
 					console.error('[ScrollyMap] load error:', e);
 				} finally {
 					isLoading = false;
 				}
-
 				await tick();
-				onScrollOrResize();
+				onScroll();
 			},
-			{ rootMargin: '500px 0px' }
+			{ rootMargin: '400px 0px' }
 		);
 
 		if (sectionEl) observer.observe(sectionEl);
 	});
 
-	function loadD3(): Promise<void> {
-		if ((window as any).d3) return Promise.resolve();
-		return new Promise((resolve, reject) => {
-			const s = document.createElement('script');
-			s.src = 'https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js';
-			s.onload = () => resolve();
-			s.onerror = reject;
-			document.head.appendChild(s);
-		});
-	}
-
 	onDestroy(() => {
-		if (browser) {
-			window.removeEventListener('scroll', onScrollOrResize);
-			window.removeEventListener('resize', onScrollOrResize);
-		}
+		if (!browser) return;
+		window.removeEventListener('scroll', onScroll);
+		window.removeEventListener('resize', onScroll);
 		observer?.disconnect();
 	});
 
-	// ── Reactive ───────────────────────────────────────────────────────────
-	$: activeStep = STEPS[bgIndex] ?? STEPS[0];
-
-	$: categoryCounts = (() => {
+	$: counts = (() => {
 		const c: Record<string, number> = {};
 		for (const f of facilities) c[f.category] = (c[f.category] ?? 0) + 1;
 		return c;
 	})();
 
-	$: highlightCount = (() => {
+	$: shown = (() => {
 		const id = activeStep.id;
 		if (id === 'all') return facilities.length;
-		if (id === 'clinics') return categoryCounts['imss_clinic'] ?? 0;
-		if (id === 'drain') return categoryCounts['imss_hospital'] ?? 0;
-		if (id === 'hospitals') return categoryCounts['imss_hospital'] ?? 0;
+		if (id === 'clinics') return counts['imss_clinic'] ?? 0;
+		if (id === 'drain') return counts['imss_hospital'] ?? 0;
+		if (id === 'hospitals') return counts['imss_hospital'] ?? 0;
 		if (id === 'bienestar')
-			return (
-				(categoryCounts['imss_bienestar'] ?? 0) + (categoryCounts['imss_bienestar_hospital'] ?? 0)
-			);
+			return (counts['imss_bienestar'] ?? 0) + (counts['imss_bienestar_hospital'] ?? 0);
+		if (id === 'bienestar_hospitals_only') return counts['imss_bienestar_hospital'] ?? 0;
+		if (id === 'bienestar_hospitals')
+			return (counts['imss_hospital'] ?? 0) + (counts['imss_bienestar_hospital'] ?? 0);
 		if (id === 'explore')
 			return Object.entries(filterState)
 				.filter(([, v]) => v)
-				.reduce((a, [k]) => a + (categoryCounts[k] ?? 0), 0);
+				.reduce((a, [k]) => a + (counts[k] ?? 0), 0);
 		return 0;
-	})();
-
-	$: legendItems = (() => {
-		const id = activeStep.id;
-		if (id === 'all' || id === 'explore')
-			return ['imss_clinic', 'imss_hospital', 'imss_bienestar', 'imss_bienestar_hospital', 'ssa'];
-		if (id === 'clinics') return ['imss_clinic'];
-		if (id === 'drain') return ['imss_hospital', 'imss_clinic'];
-		if (id === 'hospitals') return ['imss_hospital'];
-		if (id === 'bienestar') return ['imss_bienestar', 'imss_bienestar_hospital'];
-		return [];
 	})();
 </script>
 
-<div class="scrolly-map-bleed" bind:this={sectionEl}>
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="sm-wrap" bind:this={sectionEl}>
 	<!-- Sticky map -->
-	<div class={'scrolly-map-bg' + (released ? ' unstick' : '')}>
+	<div class="sm-sticky {released ? 'sm-released' : ''}">
 		{#if !nearViewport || isLoading || !mapReady}
-			<div class="map-skeleton">
-				<div class="map-spinner"></div>
-				<p class="map-skeleton-label">
-					{isLoading ? 'Loading Nayarit healthcare map…' : 'Preparing map…'}
-				</p>
+			<div class="sm-skeleton">
+				<div class="sm-spinner"></div>
+				<p class="sm-skeleton-label">Loading Nayarit healthcare map…</p>
 			</div>
 		{:else}
 			<svg
-				class="map-svg"
 				viewBox="0 0 {W} {H}"
 				preserveAspectRatio="xMidYMid meet"
-				aria-label="Map of Nayarit public healthcare facilities"
+				class="sm-svg"
 				role="img"
+				aria-label="Map of Nayarit public healthcare facilities"
 			>
-				<defs>
-					<linearGradient id="smSkyGrad" x1="0" y1="0" x2="0" y2="1">
-						<stop offset="0%" stop-color="#0d0520" />
-						<stop offset="100%" stop-color="#1a0a38" />
-					</linearGradient>
-				</defs>
+				<rect width={W} height={H} fill="#0d0520" />
 
-				<rect width={W} height={H} fill="url(#smSkyGrad)" />
-
-				<!-- Municipality fills — D3-projected, guaranteed aligned -->
+				<!-- Municipality fills -->
 				{#each boundaryPaths as d}
-					<path {d} fill="rgba(42,14,88,0.28)" stroke="none" />
+					<path {d} fill="rgba(42,14,88,0.32)" stroke="none" />
 				{/each}
-
-				<!-- Municipality border lines -->
+				<!-- Internal municipality lines — very transparent -->
 				{#each boundaryPaths as d}
-					<path
-						{d}
-						fill="none"
-						stroke="rgba(123,79,166,0.22)"
-						stroke-width="0.7"
-						stroke-linejoin="round"
-					/>
+					<path {d} fill="none" stroke="rgba(155,111,204,0.18)" stroke-width="0.6" />
 				{/each}
-
-				<!-- Outer glow (same paths, wide soft stroke) -->
+				<!-- Outer state border — crisp -->
 				{#each boundaryPaths as d}
-					<path
-						{d}
-						fill="none"
-						stroke="rgba(123,79,166,0.1)"
-						stroke-width="7"
-						stroke-linejoin="round"
-					/>
+					<path {d} fill="none" stroke="rgba(155,111,204,0.75)" stroke-width="1.4" />
 				{/each}
 
-				<!-- Crisp state border -->
-				{#each boundaryPaths as d}
-					<path
-						{d}
-						fill="none"
-						stroke="rgba(155,111,204,0.7)"
-						stroke-width="1.3"
-						stroke-linejoin="round"
-					/>
-				{/each}
-
-				<!-- Roads -->
-				{#each roadPaths as road}
-					<path
-						d={road.d}
-						fill="none"
-						stroke="rgba(0,0,0,0.4)"
-						stroke-width={road.toll ? 3.5 : 2.5}
-						stroke-linecap="round"
-					/>
-					<path
-						d={road.d}
-						fill="none"
-						stroke={road.toll ? '#8b3a3a' : 'rgba(180,150,70,0.5)'}
-						stroke-width={road.toll ? 2 : 1.3}
-						stroke-linecap="round"
-						stroke-dasharray={road.toll ? '9,5' : 'none'}
-						opacity={road.toll ? 0.9 : 0.65}
-					/>
-				{/each}
-
-				<!-- City dots + labels -->
-				{#each cityPoints as city}
+				<!-- City markers -->
+				{#each cityPts as c}
 					<circle
-						cx={city.x}
-						cy={city.y}
-						r={city.capital ? 4 : 2.5}
-						fill={city.capital ? '#c8960a' : 'rgba(200,150,10,0.5)'}
+						cx={c.x}
+						cy={c.y}
+						r={c.capital ? 3.5 : 2}
+						fill={c.capital ? '#FBBF24' : 'rgba(251,191,36,0.4)'}
 						opacity="0.8"
 					/>
 					<text
-						x={city.x + 7}
-						y={city.y + 4}
-						fill={city.capital ? 'rgba(200,150,10,0.8)' : 'rgba(200,150,10,0.45)'}
+						x={c.x + 6}
+						y={c.y + 4}
+						fill={c.capital ? 'rgba(251,191,36,0.8)' : 'rgba(251,191,36,0.4)'}
 						font-family="'Syne', sans-serif"
-						font-size={city.capital ? 9 : 7.5}
-						font-weight={city.capital ? '700' : '400'}
-						letter-spacing="0.05em">{city.name}</text
+						font-size={c.capital ? 8.5 : 7}
+						font-weight={c.capital ? '700' : '400'}
+						letter-spacing="0.04em">{c.name}</text
 					>
 				{/each}
 
-				<!-- Dim dots -->
-				<g>
-					{#each projectedFacilities as f (f.clues)}
-						{@const op = getDotOpacity(f.category, activeStep.id)}
-						{#if op > 0 && op < 0.5}
-							<circle
-								cx={f.x}
-								cy={f.y}
-								r={dotRadius(f.category)}
-								fill={COLORS[f.category] ?? '#555'}
-								opacity={op}
-							/>
-						{/if}
-					{/each}
-				</g>
-
-				<!-- Highlight dots -->
-				<g>
-					{#each projectedFacilities as f (f.clues)}
-						{@const op = getDotOpacity(f.category, activeStep.id)}
-						{#if op >= 0.5}
-							<circle
-								cx={f.x}
-								cy={f.y}
-								r={dotRadius(f.category)}
-								fill={COLORS[f.category] ?? '#555'}
-								opacity={op}
-								class="dot-active"
-								role="img"
-								aria-label="{f.name}, {f.municipality}"
-								on:mouseenter={() => {
-									tooltip = { x: f.x, y: f.y, f };
-								}}
-								on:mouseleave={() => {
-									tooltip = null;
-								}}
-							/>
-						{/if}
-					{/each}
-				</g>
-
-				<!-- Valle Verde story pin -->
-				{#if bgIndex > 0}
-					<g class="story-pin">
-						<circle
-							cx={valleVerde[0]}
-							cy={valleVerde[1]}
-							r="20"
-							fill="none"
-							stroke="#c8960a"
-							stroke-width="1"
-							opacity="0.15"
+				<!-- Dim symbols -->
+				{#each projectedFacs as f (f.clues)}
+					{@const op = opacity(f.category, activeStep.id)}
+					{#if op > 0 && op < 0.5}
+						<path
+							d={shapePath(SHAPES[f.category] ?? 'circle', f.category.includes('hospital'))}
+							transform="translate({f.x},{f.y})"
+							fill={COLORS[f.category] ?? '#555'}
+							opacity={op}
 						/>
-						<circle
-							cx={valleVerde[0]}
-							cy={valleVerde[1]}
-							r="11"
-							fill="none"
-							stroke="#c8960a"
+					{/if}
+				{/each}
+
+				<!-- Highlight symbols -->
+				{#each projectedFacs as f (f.clues)}
+					{@const op = opacity(f.category, activeStep.id)}
+					{#if op >= 0.5}
+						<path
+							d={shapePath(SHAPES[f.category] ?? 'circle', f.category.includes('hospital'))}
+							transform="translate({f.x},{f.y})"
+							fill={COLORS[f.category] ?? '#555'}
+							opacity={op}
+							class="sm-dot"
+							role="img"
+							aria-label="{f.name}, {f.municipality}"
+							on:mouseenter={() => (tooltip = { x: f.x, y: f.y, f })}
+							on:mouseleave={() => (tooltip = null)}
+						/>
+					{/if}
+				{/each}
+
+				<!-- Valle Verde story pin — label only, NO circle (would look like a facility) -->
+				{#if stepIdx > 0}
+					<g class="sm-pin">
+						<!-- Small crosshair instead of circle -->
+						<line
+							x1={valleVerde[0] - 8}
+							y1={valleVerde[1]}
+							x2={valleVerde[0] + 8}
+							y2={valleVerde[1]}
+							stroke="#FBBF24"
 							stroke-width="1.5"
-							opacity="0.45"
+							opacity="0.8"
 						/>
-						<circle cx={valleVerde[0]} cy={valleVerde[1]} r="4.5" fill="#c8960a" opacity="0.95" />
+						<line
+							x1={valleVerde[0]}
+							y1={valleVerde[1] - 8}
+							x2={valleVerde[0]}
+							y2={valleVerde[1] + 8}
+							stroke="#FBBF24"
+							stroke-width="1.5"
+							opacity="0.8"
+						/>
+						<circle cx={valleVerde[0]} cy={valleVerde[1]} r="3" fill="#FBBF24" opacity="0.95" />
 						<text
-							x={valleVerde[0] + 15}
-							y={valleVerde[1] - 4}
-							fill="#c8960a"
+							x={valleVerde[0] + 11}
+							y={valleVerde[1] - 3}
+							fill="#FBBF24"
 							font-family="'Crimson Text', Georgia, serif"
 							font-style="italic"
-							font-size="11.5"
+							font-size="11"
 							opacity="0.95">Valle Verde</text
 						>
 						<text
-							x={valleVerde[0] + 15}
-							y={valleVerde[1] + 9}
-							fill="rgba(200,150,10,0.5)"
+							x={valleVerde[0] + 11}
+							y={valleVerde[1] + 8}
+							fill="rgba(251,191,36,0.55)"
 							font-family="'Syne', sans-serif"
-							font-size="8"
+							font-size="7.5"
 							letter-spacing="0.1em">AHUACATLÁN</text
 						>
 					</g>
@@ -660,106 +607,144 @@
 				{#if tooltip}
 					{@const tx = tooltip.x > W - 200 ? tooltip.x - 196 : tooltip.x + 12}
 					{@const ty = tooltip.y > H - 80 ? tooltip.y - 78 : tooltip.y + 8}
-					<g>
-						<rect
-							x={tx - 2}
-							y={ty - 2}
-							width="194"
-							height="74"
-							rx="3"
-							fill="rgba(8,3,18,0.96)"
-							stroke={COLORS[tooltip.f.category] ?? '#c8960a'}
-							stroke-width="1"
-						/>
-						<text
-							x={tx + 8}
-							y={ty + 15}
-							fill="#f0c040"
-							font-family="'Syne', sans-serif"
-							font-size="8.5"
-							font-weight="700"
-							>{tooltip.f.name.length > 27
-								? tooltip.f.name.slice(0, 26) + '…'
-								: tooltip.f.name}</text
-						>
-						<text
-							x={tx + 8}
-							y={ty + 29}
-							fill="rgba(255,255,255,0.5)"
-							font-family="'Syne', sans-serif"
-							font-size="7.5">{tooltip.f.typology.slice(0, 33)}</text
-						>
-						<text
-							x={tx + 8}
-							y={ty + 43}
-							fill="rgba(255,255,255,0.35)"
-							font-family="'Syne', sans-serif"
-							font-size="7">{tooltip.f.municipality}, Nayarit</text
-						>
-						<circle
-							cx={tx + 12}
-							cy={ty + 59}
-							r="4"
-							fill={COLORS[tooltip.f.category] ?? '#c8960a'}
-						/>
-						<text
-							x={tx + 22}
-							y={ty + 63}
-							fill="rgba(255,255,255,0.35)"
-							font-family="'Syne', sans-serif"
-							font-size="7">{LABELS[tooltip.f.category] ?? ''}</text
-						>
-					</g>
+					<rect
+						x={tx - 2}
+						y={ty - 2}
+						width="194"
+						height="62"
+						rx="3"
+						fill="rgba(8,3,18,0.96)"
+						stroke={COLORS[tooltip.f.category] ?? '#FBBF24'}
+						stroke-width="1"
+					/>
+					<text
+						x={tx + 8}
+						y={ty + 15}
+						fill="#FBBF24"
+						font-family="'Syne', sans-serif"
+						font-size="8.5"
+						font-weight="700"
+						>{tooltip.f.name.length > 27 ? tooltip.f.name.slice(0, 26) + '…' : tooltip.f.name}</text
+					>
+					<text
+						x={tx + 8}
+						y={ty + 29}
+						fill="rgba(255,255,255,0.5)"
+						font-family="'Syne', sans-serif"
+						font-size="7.5">{tooltip.f.typology.slice(0, 33)}</text
+					>
+					<text
+						x={tx + 8}
+						y={ty + 43}
+						fill="rgba(255,255,255,0.35)"
+						font-family="'Syne', sans-serif"
+						font-size="7">{tooltip.f.municipality}, Nayarit</text
+					>
+					<path
+						d={shapePath(
+							SHAPES[tooltip.f.category] ?? 'circle',
+							tooltip.f.category.includes('hospital')
+						)}
+						transform="translate({tx + 12},{ty + 55})"
+						fill={COLORS[tooltip.f.category] ?? '#FBBF24'}
+					/>
+					<text
+						x={tx + 22}
+						y={ty + 59}
+						fill="rgba(255,255,255,0.4)"
+						font-family="'Syne', sans-serif"
+						font-size="7">{LABELS[tooltip.f.category] ?? ''}</text
+					>
 				{/if}
 			</svg>
 
-			<!-- Legend overlay -->
-			<div class="map-overlay">
-				<div class="map-legend">
-					{#each legendItems as cat}
-						<div class="legend-row">
-							<span class="legend-dot" style="background:{COLORS[cat]}"></span>
-							<span class="legend-label">{LABELS[cat]}</span>
-						</div>
-					{/each}
-					<div class="legend-road-row">
-						<span class="legend-road legend-road--toll"></span>
-						<span class="legend-label">Toll road (cuota)</span>
+			<!-- Legend — top right -->
+			<div class="sm-legend">
+				<p class="sm-legend-hed">Legend</p>
+				{#each activeLegend as cat}
+					<div class="sm-legend-row">
+						<!-- Shape icon in legend using inline SVG -->
+						<svg width="18" height="18" viewBox="-9 -9 18 18" class="sm-legend-icon">
+							<path
+								d={shapePath(SHAPES[cat] ?? 'circle', cat.includes('hospital'))}
+								fill={COLORS[cat]}
+								opacity="0.9"
+							/>
+						</svg>
+						<span class="sm-legend-label">{LABELS[cat]}</span>
 					</div>
-					<div class="legend-road-row">
-						<span class="legend-road legend-road--free"></span>
-						<span class="legend-label">Free highway</span>
-					</div>
-				</div>
-				<div class="map-count">
-					<span class="count-n">{highlightCount}</span>
-					<span class="count-label">shown</span>
+				{/each}
+				<div class="sm-legend-count">
+					<span class="sm-count-n">{shown}</span>
+					<span class="sm-count-l">shown</span>
 				</div>
 			</div>
 		{/if}
 	</div>
 
 	<!-- Steps -->
-	<div class="scrolly-map-steps">
+	<div class="sm-steps">
 		{#each STEPS as step, i}
-			{#if step.id !== 'explore'}
-				<div class="map-step" class:map-step--active={bgIndex === i} bind:this={textBoxEls[i]}>
-					<div class="step-box">
-						<div class="step-num">{String(i + 1).padStart(2, '0')}</div>
-						<h3 class="step-hed">{step.headline}</h3>
-						<p class="step-body">{step.body}</p>
+			<div class="sm-step" bind:this={stepEls[i]}>
+				{#if step.id !== 'explore'}
+					<div class="sm-card" class:sm-card--active={stepIdx === i}>
+						<div class="sm-step-num">{String(i + 1).padStart(2, '0')}</div>
+						<h3 class="sm-hed">{step.headline}</h3>
+						<p class="sm-body">{step.body}</p>
+
+						<!-- Step 1: facility breakdown table -->
+						{#if step.id === 'all' && mapReady}
+							<table class="sm-table">
+								<thead>
+									<tr>
+										<th></th>
+										<th>Type</th>
+										<th class="sm-table-n">Count</th>
+									</tr>
+								</thead>
+								<tbody>
+									{#each TABLE_ROWS as row}
+										{#if (counts[row.cat] ?? 0) > 0}
+											<tr>
+												<td>
+													<svg width="14" height="14" viewBox="-7 -7 14 14">
+														<path
+															d={shapePath(
+																SHAPES[row.cat] ?? 'circle',
+																row.cat.includes('hospital')
+															)}
+															fill={COLORS[row.cat]}
+															opacity="0.9"
+														/>
+													</svg>
+												</td>
+												<td class="sm-table-label">{row.label}</td>
+												<td class="sm-table-n">{counts[row.cat] ?? 0}</td>
+											</tr>
+										{/if}
+									{/each}
+									<tr class="sm-table-total">
+										<td></td>
+										<td class="sm-table-label">Total</td>
+										<td class="sm-table-n">{facilities.length}</td>
+									</tr>
+								</tbody>
+							</table>
+						{/if}
+
 						{#if step.stats}
-							<div class="step-stats">
+							<div class="sm-stats">
 								{#each step.stats as s}
-									<div class="step-stat">
-										<span class="stat-n">{s.n}</span>
-										<span class="stat-l">{s.label}</span>
+									<div class="sm-stat">
+										<span class="sm-stat-n">{s.n}</span>
+										<span class="sm-stat-l">{s.label}</span>
 									</div>
 								{/each}
 							</div>
 						{/if}
+
 						{#if step.source}
-							<p class="step-source">
+							<p class="sm-source">
 								{#if step.sourceUrl}
 									<a href={step.sourceUrl} target="_blank" rel="noopener noreferrer"
 										>{step.source} ↗</a
@@ -768,26 +753,34 @@
 							</p>
 						{/if}
 					</div>
-				</div>
-			{:else}
-				<div class="map-step map-step--explore" bind:this={textBoxEls[i]}>
-					<div class="step-box step-box--wide">
-						<div class="step-num">{String(i + 1).padStart(2, '0')}</div>
-						<h3 class="step-hed">{step.headline}</h3>
-						<p class="step-body">{step.body}</p>
-						<div class="filter-list">
+				{:else}
+					<!-- Explore / filter step -->
+					<div class="sm-card sm-card--wide" class:sm-card--active={stepIdx === i}>
+						<div class="sm-step-num">{String(i + 1).padStart(2, '0')}</div>
+						<h3 class="sm-hed">{step.headline}</h3>
+						<p class="sm-body">{step.body}</p>
+
+						<p class="sm-filter-hed">Filter by type</p>
+						<div class="sm-filters">
 							{#each Object.entries(LABELS) as [cat, label]}
-								<label class="filter-item" class:filter-item--on={filterState[cat]}>
+								<label class="sm-filter" class:sm-filter--on={filterState[cat] !== false}>
 									<input type="checkbox" bind:checked={filterState[cat]} />
-									<span class="filter-swatch" style="background:{COLORS[cat]}"></span>
-									<span class="filter-name">{label}</span>
-									<span class="filter-n">{categoryCounts[cat] ?? 0}</span>
+									<svg width="14" height="14" viewBox="-7 -7 14 14" class="sm-filter-icon">
+										<path
+											d={shapePath(SHAPES[cat] ?? 'circle', cat.includes('hospital'))}
+											fill={COLORS[cat]}
+											opacity="0.9"
+										/>
+									</svg>
+									<span class="sm-filter-name">{label}</span>
+									<span class="sm-filter-n">{counts[cat] ?? 0}</span>
 								</label>
 							{/each}
 						</div>
-						<div class="sources-block">
-							<p class="sources-hed">Data Sources</p>
-							<ul class="sources-list">
+
+						<div class="sm-sources">
+							<p class="sm-sources-hed">Data Sources</p>
+							<ul class="sm-sources-list">
 								<li>
 									<a
 										href="https://www.gob.mx/salud/documentos/datos-abiertos-de-establecimientos-de-salud-clues"
@@ -800,69 +793,62 @@
 									<a
 										href="https://www.imss.gob.mx/directorio?dom_estado=Nayarit&tipo_de_servicio=Cl%C3%ADnica"
 										target="_blank"
-										rel="noopener noreferrer">IMSS Directorio — Clínicas, Nayarit ↗</a
+										rel="noopener noreferrer">IMSS Directorio — Clínicas ↗</a
 									>
 								</li>
 								<li>
 									<a
 										href="https://www.imss.gob.mx/directorio?dom_estado=Nayarit&tipo_de_servicio=Hospital"
 										target="_blank"
-										rel="noopener noreferrer">IMSS Directorio — Hospitales, Nayarit ↗</a
+										rel="noopener noreferrer">IMSS Directorio — Hospitales ↗</a
 									>
 								</li>
 								<li>
 									<a
 										href="https://www.imss.gob.mx/directorio?dom_estado=Nayarit&tipo_de_servicio=IMSS%20Bienestar"
 										target="_blank"
-										rel="noopener noreferrer">IMSS-Bienestar Directorio, Nayarit ↗</a
+										rel="noopener noreferrer">IMSS-Bienestar Directorio ↗</a
 									>
 								</li>
-								<li>
-									INEGI Marco Geoestadístico 2023 — Shapefile 18mun (Nayarit municipalities,
-									LCC→WGS84)
-								</li>
-								<li>
-									ANEXO 1 — Listado Oficial de Unidades Transferidas al IMSS-Bienestar, Nayarit
-									(2023)
-								</li>
+								<li>INEGI Marco Geoestadístico 2023 — Shapefile 18mun</li>
 							</ul>
 						</div>
 					</div>
-				</div>
-			{/if}
+				{/if}
+			</div>
 		{/each}
 	</div>
 </div>
 
 <style>
-	.scrolly-map-bleed {
+	.sm-wrap {
 		position: relative;
 		width: 100vw;
 		left: 50%;
 		margin-left: -50vw;
 		box-sizing: border-box;
 	}
-	.scrolly-map-bg {
+
+	.sm-sticky {
 		position: sticky;
 		top: 0;
-		left: 0;
 		width: 100vw;
 		height: 100vh;
 		overflow: hidden;
-		z-index: 0;
 		background: #0d0520;
+		z-index: 0;
 		margin-bottom: 2rem;
 	}
-	.scrolly-map-bg.unstick {
+	.sm-released {
 		position: relative;
 	}
-	.map-svg {
+	.sm-svg {
 		width: 100%;
 		height: 100%;
 		display: block;
 	}
 
-	.map-skeleton {
+	.sm-skeleton {
 		width: 100%;
 		height: 100%;
 		display: flex;
@@ -870,318 +856,383 @@
 		align-items: center;
 		justify-content: center;
 		gap: 1.25rem;
-		background: #0d0520;
 	}
-	.map-spinner {
-		width: 52px;
-		height: 52px;
+	.sm-spinner {
+		width: 48px;
+		height: 48px;
 		border-radius: 50%;
-		border: 2px solid rgba(123, 79, 166, 0.2);
-		border-top-color: #c8960a;
-		animation: spin 0.9s linear infinite;
+		border: 2px solid rgba(123, 79, 166, 0.25);
+		border-top-color: #fbbf24;
+		animation: sm-spin 0.9s linear infinite;
 	}
-	@keyframes spin {
+	@keyframes sm-spin {
 		to {
 			transform: rotate(360deg);
 		}
 	}
-	.map-skeleton-label {
+	.sm-skeleton-label {
 		font-family: 'Syne', sans-serif;
-		font-size: 0.62rem;
+		font-size: 0.6rem;
 		letter-spacing: 0.2em;
 		text-transform: uppercase;
 		color: rgba(255, 255, 255, 0.2);
 		margin: 0;
 	}
 
-	.dot-active {
+	.sm-dot {
 		cursor: pointer;
-		transition: opacity 0.4s ease;
+		transition: opacity 0.3s ease;
 	}
-	.dot-active:hover {
+	.sm-dot:hover {
 		opacity: 1 !important;
-		filter: brightness(1.5);
+		filter: brightness(1.4);
 	}
-	.story-pin {
-		animation: pinPulse 2.4s ease-in-out infinite;
+	.sm-pin {
+		animation: sm-pulse 2.6s ease-in-out infinite;
 	}
-	@keyframes pinPulse {
+	@keyframes sm-pulse {
 		0%,
 		100% {
 			opacity: 1;
 		}
 		50% {
-			opacity: 0.6;
+			opacity: 0.55;
 		}
 	}
 
-	.map-overlay {
+	/* Legend */
+	.sm-legend {
 		position: absolute;
-		bottom: 1.5rem;
-		left: 1.75rem;
-		display: flex;
-		align-items: flex-end;
-		gap: 2.5rem;
+		top: 1.25rem;
+		right: 1.5rem;
+		background: rgba(8, 3, 18, 0.85);
+		backdrop-filter: blur(12px);
+		-webkit-backdrop-filter: blur(12px);
+		border: 1px solid rgba(155, 111, 204, 0.3);
+		border-radius: 6px;
+		padding: 0.9rem 1.1rem;
+		min-width: 190px;
 		pointer-events: none;
 	}
-	.map-legend {
-		display: flex;
-		flex-direction: column;
-		gap: 0.28rem;
+	.sm-legend-hed {
+		font-family: 'Syne', sans-serif;
+		font-size: 0.55rem;
+		letter-spacing: 0.22em;
+		text-transform: uppercase;
+		color: rgba(255, 255, 255, 0.35);
+		margin: 0 0 0.65rem;
+		font-weight: 700;
 	}
-	.legend-row,
-	.legend-road-row {
+	.sm-legend-row {
 		display: flex;
 		align-items: center;
-		gap: 0.4rem;
+		gap: 0.5rem;
+		margin-bottom: 0.38rem;
 	}
-	.legend-dot {
-		width: 8px;
-		height: 8px;
-		border-radius: 50%;
+	.sm-legend-icon {
 		flex-shrink: 0;
+		overflow: visible;
 	}
-	.legend-road {
-		width: 18px;
-		height: 2px;
-		flex-shrink: 0;
-	}
-	.legend-road--toll {
-		background: #8b3a3a;
-	}
-	.legend-road--free {
-		background: rgba(180, 150, 70, 0.6);
-	}
-	.legend-label {
+	.sm-legend-label {
 		font-family: 'Syne', sans-serif;
-		font-size: 0.57rem;
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
-		color: rgba(255, 255, 255, 0.45);
+		font-size: 0.63rem;
+		letter-spacing: 0.04em;
+		color: rgba(255, 255, 255, 0.72);
 	}
-	.map-count {
+	.sm-legend-count {
 		display: flex;
-		flex-direction: column;
-		align-items: flex-end;
-		gap: 0.1rem;
+		align-items: baseline;
+		gap: 0.35rem;
+		margin-top: 0.65rem;
+		border-top: 1px solid rgba(255, 255, 255, 0.08);
+		padding-top: 0.55rem;
 	}
-	.count-n {
+	.sm-count-n {
 		font-family: 'Playfair Display', Georgia, serif;
-		font-size: 2.4rem;
+		font-size: 1.6rem;
 		font-weight: 900;
-		color: rgba(200, 150, 10, 0.65);
+		color: rgba(251, 191, 36, 0.8);
 		line-height: 1;
 	}
-	.count-label {
+	.sm-count-l {
 		font-family: 'Syne', sans-serif;
-		font-size: 0.52rem;
-		letter-spacing: 0.2em;
+		font-size: 0.55rem;
+		letter-spacing: 0.15em;
 		text-transform: uppercase;
-		color: rgba(255, 255, 255, 0.2);
+		color: rgba(255, 255, 255, 0.25);
 	}
 
-	.scrolly-map-steps {
+	/* Steps */
+	.sm-steps {
 		position: relative;
 		z-index: 1;
 		pointer-events: none;
 		margin-top: -100vh;
 	}
-	.map-step {
+	.sm-step {
 		min-height: 100vh;
 		display: flex;
 		align-items: center;
 		padding: 2rem 3rem;
 		pointer-events: none;
 	}
-	.map-step--explore {
+	.sm-step:last-child {
 		justify-content: flex-end;
+		min-height: 120vh;
+		padding-top: 10vh;
+		align-items: flex-start;
 	}
-	.step-box {
-		background: rgba(10, 4, 20, 0.86);
-		backdrop-filter: blur(14px);
-		-webkit-backdrop-filter: blur(14px);
-		border: 1px solid rgba(123, 79, 166, 0.2);
-		border-radius: 4px;
-		padding: 1.75rem;
+
+	/* Card */
+	.sm-card {
+		background: rgba(10, 4, 20, 0.88);
+		backdrop-filter: blur(16px);
+		-webkit-backdrop-filter: blur(16px);
+		border: 1px solid rgba(155, 111, 204, 0.18);
+		border-radius: 6px;
+		padding: 1.6rem;
 		max-width: 360px;
 		pointer-events: all;
-		box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
-		transition: border-color 0.3s ease;
+		box-shadow: 0 16px 48px rgba(0, 0, 0, 0.65);
+		transition: border-color 0.3s;
 	}
-	.step-box--wide {
+	.sm-card--wide {
 		max-width: 420px;
 	}
-	.map-step--active .step-box {
-		border-color: rgba(200, 150, 10, 0.3);
+	.sm-card--active {
+		border-color: rgba(251, 191, 36, 0.3);
 	}
-	.step-num {
+	.sm-step-num {
 		font-family: 'Syne', sans-serif;
-		font-size: 0.56rem;
-		letter-spacing: 0.26em;
-		color: #c8960a;
+		font-size: 0.55rem;
+		letter-spacing: 0.28em;
+		color: #fbbf24;
 		font-weight: 700;
-		margin-bottom: 0.55rem;
+		margin-bottom: 0.45rem;
 		text-transform: uppercase;
 	}
-	.step-hed {
+	.sm-hed {
 		font-family: 'Playfair Display', Georgia, serif;
-		font-size: clamp(1.05rem, 2vw, 1.4rem);
+		font-size: clamp(1rem, 2vw, 1.3rem);
 		font-weight: 700;
 		color: #f0e8d0;
 		line-height: 1.25;
-		margin: 0 0 0.8rem;
+		margin: 0 0 0.7rem;
 	}
-	.step-body {
+	.sm-body {
 		font-family: 'Source Serif 4', Georgia, serif;
-		font-size: 0.88rem;
-		line-height: 1.78;
+		font-size: 0.875rem;
+		line-height: 1.75;
+		color: rgba(255, 255, 255, 0.68);
+		margin: 0 0 0.85rem;
+	}
+
+	/* Facility table */
+	.sm-table {
+		width: 100%;
+		border-collapse: collapse;
+		margin: 0 0 0.85rem;
+	}
+	.sm-table thead tr {
+		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	}
+	.sm-table th {
+		font-family: 'Syne', sans-serif;
+		font-size: 0.52rem;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: rgba(255, 255, 255, 0.3);
+		padding: 0 0 0.35rem;
+		text-align: left;
+		font-weight: 600;
+	}
+	.sm-table td {
+		padding: 0.28rem 0.15rem;
+		vertical-align: middle;
+	}
+	.sm-table-label {
+		font-family: 'Syne', sans-serif;
+		font-size: 0.65rem;
 		color: rgba(255, 255, 255, 0.65);
-		margin: 0 0 1rem;
 	}
-	.step-stats {
+	.sm-table-n {
+		text-align: right;
+		font-family: 'Syne', sans-serif;
+		font-size: 0.68rem;
+		font-weight: 700;
+		color: rgba(255, 255, 255, 0.55);
+		padding-right: 0.25rem;
+	}
+	.sm-table-total td {
+		border-top: 1px solid rgba(255, 255, 255, 0.1);
+		padding-top: 0.4rem;
+	}
+	.sm-table-total .sm-table-label {
+		color: rgba(255, 255, 255, 0.8);
+		font-weight: 700;
+	}
+	.sm-table-total .sm-table-n {
+		color: #fbbf24;
+	}
+
+	/* Stats */
+	.sm-stats {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-		gap: 0.6rem;
-		border-top: 1px solid rgba(200, 150, 10, 0.18);
-		padding-top: 0.8rem;
-		margin-bottom: 0.8rem;
+		grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
+		gap: 0.5rem;
+		border-top: 1px solid rgba(251, 191, 36, 0.18);
+		padding-top: 0.7rem;
+		margin-bottom: 0.7rem;
 	}
-	.step-stat {
+	.sm-stat {
 		display: flex;
 		flex-direction: column;
-		gap: 0.12rem;
+		gap: 0.1rem;
 	}
-	.stat-n {
+	.sm-stat-n {
 		font-family: 'Playfair Display', serif;
-		font-size: 1.5rem;
+		font-size: 1.35rem;
 		font-weight: 900;
-		color: #c8960a;
+		color: #fbbf24;
 		line-height: 1;
 	}
-	.stat-l {
+	.sm-stat-l {
 		font-family: 'Syne', sans-serif;
-		font-size: 0.53rem;
+		font-size: 0.51rem;
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
-		color: rgba(255, 255, 255, 0.35);
+		color: rgba(255, 255, 255, 0.32);
 		line-height: 1.3;
 	}
-	.step-source {
+
+	/* Source */
+	.sm-source {
 		font-family: 'Syne', sans-serif;
-		font-size: 0.56rem;
+		font-size: 0.54rem;
 		letter-spacing: 0.06em;
-		color: rgba(255, 255, 255, 0.22);
-		border-left: 2px solid rgba(200, 150, 10, 0.22);
+		color: rgba(255, 255, 255, 0.2);
+		border-left: 2px solid rgba(251, 191, 36, 0.2);
 		padding-left: 0.5rem;
 		margin: 0;
 		line-height: 1.5;
 	}
-	.step-source a {
-		color: rgba(200, 150, 10, 0.5);
+	.sm-source a {
+		color: rgba(251, 191, 36, 0.45);
 		text-decoration: none;
 	}
-	.step-source a:hover {
-		color: #c8960a;
+	.sm-source a:hover {
+		color: #fbbf24;
 		text-decoration: underline;
 	}
-	.filter-list {
+
+	/* Filter */
+	.sm-filter-hed {
+		font-family: 'Syne', sans-serif;
+		font-size: 0.54rem;
+		letter-spacing: 0.2em;
+		text-transform: uppercase;
+		color: rgba(255, 255, 255, 0.3);
+		margin: 0.7rem 0 0.4rem;
+	}
+	.sm-filters {
 		display: flex;
 		flex-direction: column;
-		gap: 0.25rem;
-		margin: 0.85rem 0;
+		gap: 0.18rem;
+		margin-bottom: 1rem;
 	}
-	.filter-item {
+	.sm-filter {
 		display: flex;
 		align-items: center;
-		gap: 0.5rem;
+		gap: 0.45rem;
 		cursor: pointer;
-		padding: 0.28rem 0.4rem;
+		padding: 0.22rem 0.35rem;
 		border-radius: 3px;
-		opacity: 0.32;
+		opacity: 0.3;
 		transition:
 			opacity 0.15s,
 			background 0.15s;
 	}
-	.filter-item--on {
+	.sm-filter--on {
 		opacity: 1;
 	}
-	.filter-item:hover {
+	.sm-filter:hover {
 		background: rgba(255, 255, 255, 0.05);
 		opacity: 1;
 	}
-	.filter-item input {
+	.sm-filter input {
 		display: none;
 	}
-	.filter-swatch {
-		width: 10px;
-		height: 10px;
-		border-radius: 50%;
+	.sm-filter-icon {
 		flex-shrink: 0;
+		overflow: visible;
 	}
-	.filter-name {
+	.sm-filter-name {
 		flex: 1;
 		font-family: 'Syne', sans-serif;
-		font-size: 0.67rem;
-		letter-spacing: 0.05em;
-		color: rgba(255, 255, 255, 0.72);
+		font-size: 0.64rem;
+		letter-spacing: 0.04em;
+		color: rgba(255, 255, 255, 0.75);
 	}
-	.filter-n {
+	.sm-filter-n {
 		font-family: 'Syne', sans-serif;
-		font-size: 0.6rem;
-		color: rgba(255, 255, 255, 0.28);
-		min-width: 26px;
+		font-size: 0.58rem;
+		color: rgba(255, 255, 255, 0.25);
+		min-width: 24px;
 		text-align: right;
 	}
-	.sources-block {
+
+	/* Sources */
+	.sm-sources {
 		border-top: 1px solid rgba(255, 255, 255, 0.06);
-		padding-top: 0.9rem;
-		margin-top: 0.3rem;
+		padding-top: 0.85rem;
 	}
-	.sources-hed {
+	.sm-sources-hed {
 		font-family: 'Syne', sans-serif;
-		font-size: 0.56rem;
+		font-size: 0.54rem;
 		letter-spacing: 0.2em;
 		text-transform: uppercase;
-		color: rgba(200, 150, 10, 0.45);
-		margin: 0 0 0.45rem;
+		color: rgba(251, 191, 36, 0.4);
+		margin: 0 0 0.4rem;
 	}
-	.sources-list {
+	.sm-sources-list {
 		list-style: none;
 		padding: 0;
 		margin: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 0.3rem;
+		gap: 0.28rem;
 	}
-	.sources-list li {
+	.sm-sources-list li {
 		font-family: 'Syne', sans-serif;
-		font-size: 0.58rem;
-		color: rgba(255, 255, 255, 0.24);
+		font-size: 0.57rem;
+		color: rgba(255, 255, 255, 0.2);
 		line-height: 1.5;
 	}
-	.sources-list a {
-		color: rgba(200, 150, 10, 0.45);
+	.sm-sources-list a {
+		color: rgba(251, 191, 36, 0.4);
 		text-decoration: none;
 	}
-	.sources-list a:hover {
-		color: #c8960a;
+	.sm-sources-list a:hover {
+		color: #fbbf24;
 		text-decoration: underline;
 	}
+
 	@media (max-width: 767px) {
-		.map-step {
+		.sm-step {
 			align-items: flex-end;
 			padding: 1.25rem 1rem 2rem;
 		}
-		.map-step--explore {
+		.sm-step:last-child {
 			justify-content: flex-start;
 		}
-		.step-box,
-		.step-box--wide {
+		.sm-card,
+		.sm-card--wide {
 			max-width: 100%;
 		}
-		.map-overlay {
-			bottom: auto;
-			top: 1rem;
+		.sm-legend {
+			top: 0.75rem;
+			right: 0.75rem;
+			min-width: 150px;
 		}
 	}
 </style>

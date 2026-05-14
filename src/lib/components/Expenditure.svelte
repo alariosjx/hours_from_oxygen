@@ -375,11 +375,12 @@
 	</div>
 
 	<!-- Chart -->
-	<div class="chart-wrap">
-		<canvas
-			bind:this={canvasEl}
-			role="img"
-			aria-label="Mexico health expenditure trends 2015–2023, WHO GHED data"
+	<div
+		class="chart-wrap"
+		role="img"
+		aria-label="Mexico health expenditure trends 2015–2023, WHO GHED data"
+	>
+		<canvas bind:this={canvasEl}
 			>Mexico health spending data 2015–2023. Source: WHO Global Health Expenditure Database.</canvas
 		>
 	</div>
