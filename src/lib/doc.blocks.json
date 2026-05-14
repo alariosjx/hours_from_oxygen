@@ -33,7 +33,16 @@
   },
   {
     "type": "html",
-    "html": "<p>After taking office in December 2018, President Andres Manuel Lopez Obrador announced the Fourth Transformation, a sweeping set of social reforms that included an overhaul of public healthcare. His administration canceled Seguro Popular &mdash; the existing coverage program &mdash; and replaced it with a new federal entity called INSABI. The intention was to weed out corruption and extend coverage to more Mexicans. The execution collapsed. INSABI was so loosely structured that many people didn&#39;t know whether they were covered, or where they could go to use it. Researchers and international institutions later documented the failure. The program was eventually replaced with IMSS-Bienestar, but the damage had already been done &mdash; and the virus arrived before the system could stabilize.</p>\n<p>Public systems like IMSS, ISSSTE, and IMSS-Bienestar make up the largest single source of healthcare for the 133 million people in Mexico. IMSS operates by having employers, the government, and individuals pay a dividend for services. ISSSTE is a system for government employees at different administrative levels, and IMSS-Bienestar is for those without sufficient income from the latter two. Together, the systems serve around 80% of the Mexican population.</p>\n<p>Private healthcare systems, in comparison, make up a much smaller percentage, at about 1% of total patients in 2022. Those with the ability to pay out of pocket or with insurance that covers receive what is often considered higher-quality care with more available resources per patient.</p>\n<p>University of California, San Francisco, researcher Lucia Abascal Miguel worked on a large team to evaluate the COVID-19 response in Mexico. She said the government&#39;s attempts to overhaul the public healthcare system failed to address rampant inequalities in Mexico, and the transition to a new system caused more harm than good. She said the virus hit with &quot;full force&quot; in a country that was in a vulnerable position as it changed how it provided healthcare services.</p>\n<p>Abascal Miguel said the team found a stark divide for those who sought medical attention at a public versus private location. She said IMSS reached 60% mortality for hospitalized patients, while private hospitals averaged around 20%.</p>"
+    "html": "<p>After taking office in December 2018, President Andres Manuel Lopez Obrador announced the Fourth Transformation, a sweeping set of social reforms that included an overhaul of public healthcare. His administration canceled Seguro Popular &mdash; the existing coverage program &mdash; and replaced it with a new federal entity called INSABI. The intention was to weed out corruption and extend coverage to more Mexicans. The execution collapsed. INSABI was so loosely structured that many people didn&#39;t know whether they were covered, or where they could go to use it. Researchers and international institutions later documented the failure. The program was eventually replaced with IMSS-Bienestar, but the damage had already been done &mdash; and the virus arrived before the system could stabilize.</p>\n<p>Public systems like IMSS, ISSSTE, and IMSS-Bienestar make up the largest single source of healthcare for the 133 million people in Mexico. IMSS operates by having employers, the government, and individuals pay a dividend for services. ISSSTE is a system for government employees at different administrative levels, and IMSS-Bienestar is for those without sufficient income from the latter two. Together, the systems serve around 80% of the Mexican population.</p>"
+  },
+  {
+    "type": "shortcode",
+    "name": "ScrollyMap",
+    "attrs": {}
+  },
+  {
+    "type": "html",
+    "html": "<p>Private healthcare systems, in comparison, make up a much smaller percentage, at about 1% of total patients in 2022. Those with the ability to pay out of pocket or with insurance that covers receive what is often considered higher-quality care with more available resources per patient.</p>\n<p>University of California, San Francisco, researcher Lucia Abascal Miguel worked on a large team to evaluate the COVID-19 response in Mexico. She said the government&#39;s attempts to overhaul the public healthcare system failed to address rampant inequalities in Mexico, and the transition to a new system caused more harm than good. She said the virus hit with &quot;full force&quot; in a country that was in a vulnerable position as it changed how it provided healthcare services.</p>\n<p>Abascal Miguel said the team found a stark divide for those who sought medical attention at a public versus private location. She said IMSS reached 60% mortality for hospitalized patients, while private hospitals averaged around 20%.</p>"
   },
   {
     "type": "shortcode",
@@ -75,7 +84,23 @@
   },
   {
     "type": "html",
-    "html": "<p>Imelda described her parents as hard-working people from agricultural backgrounds who had to find ways to provide for their nine children. Jose worked in the region&#39;s volcanic soil growing sugar cane, while Guty ran a small shop from their home and sold ziploc bags of ice for 10 pesos - equivalent to less than a US dollar.</p>\n<p>Jose and Guty lived in Valle Verde, a town of no more than 400 people in the municipality of Ahuacatlan. They are equidistant from the cities of Ixtlan del Rio and Tepic, the state&#39;s capital and largest city.</p>\n<p>The family relied on public services for low-income people. Public healthcare was their only option. Jose and Guty didn&#39;t have large pension plans, having worked informal jobs their entire lives - like the others in their community. When Jose was fighting an aggressive form of prostate cancer, he had to rely on doctors from IMSS - who largely helped to keep him in remission. Disposable income came from remittances from their children, who had long since moved away to major cities.</p>\n<p>Rural communities in Mexico make up about 20 percent of the total population, but an estimated 47% of rural residents live in poverty, 30 points higher than the rate in urban areas. Across Mexico, roughly 12% of the population are adults aged 60 and older, and about half are believed to live in poverty, with the percentage rising sharply in rural communities. Jose, at 82 and recovering from aggressive prostate cancer, sat at the intersection of nearly every risk factor researchers would later identify as predictive of the worst outcomes.</p>"
+    "html": "<p>Imelda described her parents as hard-working people from agricultural backgrounds who had to find ways to provide for their nine children. Jose worked in the region&#39;s volcanic soil growing sugar cane, while Guty ran a small shop from their home and sold ziploc bags of ice for 10 pesos - equivalent to less than a US dollar.</p>\n<p>Jose and Guty lived in Valle Verde, a town of no more than 400 people in the municipality of Ahuacatlan. They are equidistant from the cities of Ixtlan del Rio and Tepic, the state&#39;s capital and largest city.</p>"
+  },
+  {
+    "type": "shortcode",
+    "name": "ThreeTileCollage",
+    "attrs": {
+      "p": true,
+      "nbsp": true,
+      "images": "images/abuelotwins.jpeg, images/abuela1.jpeg, images/abuelokids.jpeg",
+      "alts": "",
+      "caption": "",
+      "width": "82vw"
+    }
+  },
+  {
+    "type": "html",
+    "html": "<p>The family relied on public services for low-income people. Public healthcare was their only option. Jose and Guty didn&#39;t have large pension plans, having worked informal jobs their entire lives - like the others in their community. When Jose was fighting an aggressive form of prostate cancer, he had to rely on doctors from IMSS - who largely helped to keep him in remission. Disposable income came from remittances from their children, who had long since moved away to major cities.</p>\n<p>Rural communities in Mexico make up about 20 percent of the total population, but an estimated 47% of rural residents live in poverty, 30 points higher than the rate in urban areas. Across Mexico, roughly 12% of the population are adults aged 60 and older, and about half are believed to live in poverty, with the percentage rising sharply in rural communities. Jose, at 82 and recovering from aggressive prostate cancer, sat at the intersection of nearly every risk factor researchers would later identify as predictive of the worst outcomes.</p>"
   },
   {
     "type": "shortcode",

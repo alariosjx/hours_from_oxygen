@@ -298,10 +298,7 @@
 				<div class="layer" class:active={i === bgIndex} aria-hidden="true">
 					{#if loadedIndices.has(i)}
 						{#if m.kind === 'image'}
-							<div
-								class="media image"
-								style={`background-image:url("${encodeURI(m.url)}")`}
-							></div>
+							<div class="media image" style={`background-image:url("${encodeURI(m.url)}")`}></div>
 						{:else}
 							<video
 								class="media video"
